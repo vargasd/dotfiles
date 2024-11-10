@@ -1,0 +1,35 @@
+[alias]
+	co = "checkout"
+	bco = "!f() { git checkout -b \"$(whoami)/$1\"; }; f"
+	graph = "log --pretty=author --graph --decorate"
+	overlay = "!f() { [ -d .git ] && git --git-dir=.gitoverlay --work-tree=. $@; }; f"
+[commit]
+	gpgSign = true
+[fetch]
+	prune = true
+[grep]
+	lineNumber = true
+[init]
+	defaultBranch = "main"
+[pretty]
+	author = "%C(auto)%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s%x20%x1b[33m%C(cyan)%aN/%C(blue)%cN %C(magenta)%ai%x1b[0m"
+[pull]
+	rebase = true
+[push]
+	default = "matching"
+[rebase]
+	autosquash = true
+[tag]
+	gpgSign = true
+[user]
+	email = "sam@vargasd.com"
+	name = "Samuel Varga"
+	signingKey = "9360638973266EE4"
+[merge]
+	tool = "nvimdiff"
+[mergetool]
+	keepBackup = false
+[mergetool "nvimdiff"]
+	layout = "LOCAL,REMOTE / MERGED"
+[mergetool "vimdiff"]
+	layout = "LOCAL,REMOTE / MERGED"

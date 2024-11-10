@@ -1,0 +1,9 @@
+.DS_Store
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+Session.vim
+.vim
+.idea
+.samignore
+.helix
+.gitoverlay
