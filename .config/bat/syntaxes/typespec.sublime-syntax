@@ -1,0 +1,840 @@
+%YAML 1.2
+---
+# http://www.sublimetext.com/docs/syntax.html
+name: TypeSpec
+file_extensions:
+  - tsp
+scope: source.tsp
+contexts:
+  main:
+    - include: statement
+  alias-id:
+    - match: (=)\s*
+      captures:
+        1: keyword.operator.assignment.tsp
+      push:
+        - meta_scope: meta.alias-id.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: expression
+  alias-statement:
+    - match: '\b(alias)\b\s+(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)\s*'
+      captures:
+        1: keyword.other.tsp
+        2: entity.name.type.tsp
+      push:
+        - meta_scope: meta.alias-statement.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: alias-id
+        - include: type-parameters
+  augment-decorator-statement:
+    - match: '((@@)\b[_$[:alpha:]](?:[_$[:alnum:]]|\.[_$[:alpha:]])*\b)'
+      captures:
+        1: entity.name.tag.tsp
+        2: entity.name.tag.tsp
+      push:
+        - meta_scope: meta.augment-decorator-statement.typespec
+        - match: '(?=[_$[:alpha:]])|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: parenthesized-expression
+  block-comment:
+    - match: /\*
+      push:
+        - meta_scope: comment.block.tsp
+        - match: \*/
+          pop: true
+  boolean-literal:
+    - match: \b(true|false)\b
+      scope: constant.language.tsp
+  callExpression:
+    - match: '(\b[_$[:alpha:]](?:[_$[:alnum:]]|\.[_$[:alpha:]])*\b)\s*(\()'
+      captures:
+        1: entity.name.function.tsp
+        2: punctuation.parenthesis.open.tsp
+      push:
+        - meta_scope: meta.callExpression.typespec
+        - match: \)
+          captures:
+            0: punctuation.parenthesis.close.tsp
+          pop: true
+        - include: token
+        - include: expression
+        - include: punctuation-comma
+  const-statement:
+    - match: '\b(const)\b\s+(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)'
+      captures:
+        1: keyword.other.tsp
+        2: variable.name.tsp
+      push:
+        - meta_scope: meta.const-statement.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: type-annotation
+        - include: operator-assignment
+        - include: expression
+  decorator:
+    - match: '((@)\b[_$[:alpha:]](?:[_$[:alnum:]]|\.[_$[:alpha:]])*\b)'
+      captures:
+        1: entity.name.tag.tsp
+        2: entity.name.tag.tsp
+      push:
+        - meta_scope: meta.decorator.typespec
+        - match: '(?=[_$[:alpha:]])|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: parenthesized-expression
+  decorator-declaration-statement:
+    - match: '(?:(extern)\s+)?\b(dec)\b\s+(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)'
+      captures:
+        1: keyword.other.tsp
+        2: keyword.other.tsp
+        3: entity.name.function.tsp
+      push:
+        - meta_scope: meta.decorator-declaration-statement.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: operation-parameters
+  directive:
+    - match: '\s*(#\b[_$[:alpha:]][_$[:alnum:]]*\b)'
+      captures:
+        1: keyword.directive.name.tsp
+      push:
+        - meta_scope: meta.directive.typespec
+        - match: '$|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: string-literal
+        - include: identifier-expression
+  doc-comment:
+    - match: /\*\*
+      captures:
+        0: comment.block.tsp
+      push:
+        - meta_scope: comment.block.tsp
+        - match: \*/
+          captures:
+            0: comment.block.tsp
+          pop: true
+        - include: doc-comment-block
+  doc-comment-block:
+    - include: doc-comment-param
+    - include: doc-comment-return-tag
+    - include: doc-comment-unknown-tag
+  doc-comment-param:
+    - match: '(?x)((@)(?:param|template|prop))\s+(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)\b'
+      scope: comment.block.tsp
+      captures:
+        1: keyword.tag.tspdoc
+        2: keyword.tag.tspdoc
+        3: variable.name.tsp
+  doc-comment-return-tag:
+    - match: (?x)((@)(?:returns))\b
+      scope: comment.block.tsp
+      captures:
+        1: keyword.tag.tspdoc
+        2: keyword.tag.tspdoc
+  doc-comment-unknown-tag:
+    - match: '(?x)((@)(?:\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`))\b'
+      scope: comment.block.tsp
+      captures:
+        1: entity.name.tag.tsp
+        2: entity.name.tag.tsp
+  else-expression:
+    - match: \b(else)\b
+      captures:
+        1: keyword.other.tsp
+      push:
+        - meta_scope: meta.else-expression.typespec
+        - match: '((?<=\})|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b))'
+          pop: true
+        - include: projection-expression
+        - include: projection-body
+  else-if-expression:
+    - match: \b(else)\s+(if)\b
+      captures:
+        1: keyword.other.tsp
+        2: keyword.other.tsp
+      push:
+        - meta_scope: meta.else-if-expression.typespec
+        - match: '((?<=\})|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b))'
+          pop: true
+        - include: projection-expression
+        - include: projection-body
+  enum-body:
+    - match: '\{'
+      captures:
+        0: punctuation.curlybrace.open.tsp
+      push:
+        - meta_scope: meta.enum-body.typespec
+        - match: '\}'
+          captures:
+            0: punctuation.curlybrace.close.tsp
+          pop: true
+        - include: enum-member
+        - include: token
+        - include: directive
+        - include: decorator
+        - include: punctuation-comma
+  enum-member:
+    - match: '(?:(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)\s*(:?))'
+      captures:
+        1: variable.name.tsp
+        2: keyword.operator.type.annotation.tsp
+      push:
+        - meta_scope: meta.enum-member.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: type-annotation
+  enum-statement:
+    - match: '\b(enum)\b\s+(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)'
+      captures:
+        1: keyword.other.tsp
+        2: entity.name.type.tsp
+      push:
+        - meta_scope: meta.enum-statement.typespec
+        - match: '(?<=\})|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: enum-body
+  escape-character:
+    - match: \\.
+      scope: constant.character.escape.tsp
+  expression:
+    - include: token
+    - include: directive
+    - include: parenthesized-expression
+    - include: valueof
+    - include: typeof
+    - include: type-arguments
+    - include: object-literal
+    - include: tuple-literal
+    - include: tuple-expression
+    - include: model-expression
+    - include: callExpression
+    - include: identifier-expression
+  function-call:
+    - match: '(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)\s*(\()'
+      captures:
+        1: entity.name.function.tsp
+        2: punctuation.parenthesis.open.tsp
+      push:
+        - meta_scope: meta.function-call.typespec
+        - match: \)
+          captures:
+            0: punctuation.parenthesis.close.tsp
+          pop: true
+        - include: expression
+  function-declaration-statement:
+    - match: '(?:(extern)\s+)?\b(fn)\b\s+(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)'
+      captures:
+        1: keyword.other.tsp
+        2: keyword.other.tsp
+        3: entity.name.function.tsp
+      push:
+        - meta_scope: meta.function-declaration-statement.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: operation-parameters
+        - include: type-annotation
+  identifier-expression:
+    - match: '\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`'
+      scope: entity.name.type.tsp
+  if-expression:
+    - match: \b(if)\b
+      captures:
+        1: keyword.other.tsp
+      push:
+        - meta_scope: meta.if-expression.typespec
+        - match: '((?<=\})|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b))'
+          pop: true
+        - include: projection-expression
+        - include: projection-body
+  import-statement:
+    - match: \b(import)\b
+      captures:
+        1: keyword.other.tsp
+      push:
+        - meta_scope: meta.import-statement.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+  interface-body:
+    - match: '\{'
+      captures:
+        0: punctuation.curlybrace.open.tsp
+      push:
+        - meta_scope: meta.interface-body.typespec
+        - match: '\}'
+          captures:
+            0: punctuation.curlybrace.close.tsp
+          pop: true
+        - include: token
+        - include: directive
+        - include: decorator
+        - include: interface-member
+        - include: punctuation-semicolon
+  interface-heritage:
+    - match: \b(extends)\b
+      captures:
+        1: keyword.other.tsp
+      push:
+        - meta_scope: meta.interface-heritage.typespec
+        - match: '((?=\{)|(?=;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b))'
+          pop: true
+        - include: expression
+        - include: punctuation-comma
+  interface-member:
+    - match: '(?:\b(op)\b\s+)?(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)'
+      captures:
+        1: keyword.other.tsp
+        2: entity.name.function.tsp
+      push:
+        - meta_scope: meta.interface-member.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: operation-signature
+  interface-statement:
+    - match: \b(interface)\b
+      captures:
+        1: keyword.other.tsp
+      push:
+        - meta_scope: meta.interface-statement.typespec
+        - match: '(?<=\})|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: type-parameters
+        - include: interface-heritage
+        - include: interface-body
+        - include: expression
+  line-comment:
+    - match: //.*$
+      scope: comment.line.double-slash.tsp
+  model-expression:
+    - match: '\{'
+      captures:
+        0: punctuation.curlybrace.open.tsp
+      push:
+        - meta_scope: meta.model-expression.typespec
+        - match: '\}'
+          captures:
+            0: punctuation.curlybrace.close.tsp
+          pop: true
+        - include: model-property
+        - include: token
+        - include: directive
+        - include: decorator
+        - include: spread-operator
+        - include: punctuation-semicolon
+  model-heritage:
+    - match: \b(extends|is)\b
+      captures:
+        1: keyword.other.tsp
+      push:
+        - meta_scope: meta.model-heritage.typespec
+        - match: '((?=\{)|(?=;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b))'
+          pop: true
+        - include: expression
+        - include: punctuation-comma
+  model-property:
+    - match: '(?:(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)|(\"(?:[^\"\\]|\\.)*\"))'
+      captures:
+        1: variable.name.tsp
+        2: string.quoted.double.tsp
+      push:
+        - meta_scope: meta.model-property.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: type-annotation
+        - include: operator-assignment
+        - include: expression
+  model-statement:
+    - match: \b(model)\b
+      captures:
+        1: keyword.other.tsp
+      push:
+        - meta_scope: meta.model-statement.typespec
+        - match: '(?<=\})|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: type-parameters
+        - include: model-heritage
+        - include: expression
+  namespace-body:
+    - match: '\{'
+      captures:
+        0: punctuation.curlybrace.open.tsp
+      push:
+        - meta_scope: meta.namespace-body.typespec
+        - match: '\}'
+          captures:
+            0: punctuation.curlybrace.close.tsp
+          pop: true
+        - include: statement
+  namespace-name:
+    - match: '(?=[_$[:alpha:]])'
+      push:
+        - meta_scope: meta.namespace-name.typespec
+        - match: '((?=\{)|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b))'
+          pop: true
+        - include: identifier-expression
+        - include: punctuation-accessor
+  namespace-statement:
+    - match: \b(namespace)\b
+      captures:
+        1: keyword.other.tsp
+      push:
+        - meta_scope: meta.namespace-statement.typespec
+        - match: '((?<=\})|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b))'
+          pop: true
+        - include: token
+        - include: namespace-name
+        - include: namespace-body
+  numeric-literal:
+    - match: '(?:\b(?<!\$)0(?:x|X)[0-9a-fA-F][0-9a-fA-F_]*(n)?\b(?!\$)|\b(?<!\$)0(?:b|B)[01][01_]*(n)?\b(?!\$)|(?<!\$)(?:(?:\b[0-9][0-9_]*(\.)[0-9][0-9_]*[eE][+-]?[0-9][0-9_]*(n)?\b)|(?:\b[0-9][0-9_]*(\.)[eE][+-]?[0-9][0-9_]*(n)?\b)|(?:\B(\.)[0-9][0-9_]*[eE][+-]?[0-9][0-9_]*(n)?\b)|(?:\b[0-9][0-9_]*[eE][+-]?[0-9][0-9_]*(n)?\b)|(?:\b[0-9][0-9_]*(\.)[0-9][0-9_]*(n)?\b)|(?:\b[0-9][0-9_]*(\.)(n)?\B)|(?:\B(\.)[0-9][0-9_]*(n)?\b)|(?:\b[0-9][0-9_]*(n)?\b(?!\.)))(?!\$))'
+      scope: constant.numeric.tsp
+  object-literal:
+    - match: '#\{'
+      captures:
+        0: punctuation.hashcurlybrace.open.tsp
+      push:
+        - meta_scope: meta.object-literal.typespec
+        - match: '\}'
+          captures:
+            0: punctuation.curlybrace.close.tsp
+          pop: true
+        - include: token
+        - include: object-literal-property
+        - include: directive
+        - include: spread-operator
+        - include: punctuation-comma
+  object-literal-property:
+    - match: '(?:(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)\s*(:))'
+      captures:
+        1: variable.name.tsp
+        2: keyword.operator.type.annotation.tsp
+      push:
+        - meta_scope: meta.object-literal-property.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: expression
+  operation-heritage:
+    - match: \b(is)\b
+      captures:
+        1: keyword.other.tsp
+      push:
+        - meta_scope: meta.operation-heritage.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: expression
+  operation-parameters:
+    - match: \(
+      captures:
+        0: punctuation.parenthesis.open.tsp
+      push:
+        - meta_scope: meta.operation-parameters.typespec
+        - match: \)
+          captures:
+            0: punctuation.parenthesis.close.tsp
+          pop: true
+        - include: token
+        - include: decorator
+        - include: model-property
+        - include: spread-operator
+        - include: punctuation-comma
+  operation-signature:
+    - include: type-parameters
+    - include: operation-heritage
+    - include: operation-parameters
+    - include: type-annotation
+  operation-statement:
+    - match: '\b(op)\b\s+(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)'
+      captures:
+        1: keyword.other.tsp
+        2: entity.name.function.tsp
+      push:
+        - meta_scope: meta.operation-statement.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: operation-signature
+  operator-assignment:
+    - match: '='
+      scope: keyword.operator.assignment.tsp
+  parenthesized-expression:
+    - match: \(
+      captures:
+        0: punctuation.parenthesis.open.tsp
+      push:
+        - meta_scope: meta.parenthesized-expression.typespec
+        - match: \)
+          captures:
+            0: punctuation.parenthesis.close.tsp
+          pop: true
+        - include: expression
+        - include: punctuation-comma
+  projection:
+    - match: (from|to)
+      captures:
+        1: keyword.other.tsp
+      push:
+        - meta_scope: meta.projection.typespec
+        - match: '((?<=\})|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b))'
+          pop: true
+        - include: projection-parameters
+        - include: projection-body
+  projection-body:
+    - match: '\{'
+      captures:
+        0: punctuation.curlybrace.open.tsp
+      push:
+        - meta_scope: meta.projection-body.typespec
+        - match: '\}'
+          captures:
+            0: punctuation.curlybrace.close.tsp
+          pop: true
+        - include: projection-expression
+        - include: punctuation-semicolon
+  projection-expression:
+    - include: else-if-expression
+    - include: if-expression
+    - include: else-expression
+    - include: function-call
+  projection-parameter:
+    - match: '(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)'
+      captures:
+        1: variable.name.tsp
+      push:
+        - meta_scope: meta.projection-parameter.typespec
+        - match: '(?=\))|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+  projection-parameters:
+    - match: \(
+      captures:
+        0: punctuation.parenthesis.open.tsp
+      push:
+        - meta_scope: meta.projection-parameters.typespec
+        - match: \)
+          captures:
+            0: punctuation.parenthesis.close.tsp
+          pop: true
+        - include: token
+        - include: projection-parameter
+  projection-statement:
+    - match: '\b(projection)\b\s+(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)(#)(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)'
+      captures:
+        1: keyword.other.tsp
+        2: keyword.other.tsp
+        3: keyword.operator.selector.tsp
+        4: variable.name.tsp
+      push:
+        - meta_scope: meta.projection-statement.typespec
+        - match: '((?<=\})|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b))'
+          pop: true
+        - include: projection-statement-body
+  projection-statement-body:
+    - match: '\{'
+      captures:
+        0: punctuation.curlybrace.open.tsp
+      push:
+        - meta_scope: meta.projection-statement-body.typespec
+        - match: '\}'
+          captures:
+            0: punctuation.curlybrace.close.tsp
+          pop: true
+        - include: projection
+  punctuation-accessor:
+    - match: \.
+      scope: punctuation.accessor.tsp
+  punctuation-comma:
+    - match: ','
+      scope: punctuation.comma.tsp
+  punctuation-semicolon:
+    - match: ;
+      scope: punctuation.terminator.statement.tsp
+  scalar-body:
+    - match: '\{'
+      captures:
+        0: punctuation.curlybrace.open.tsp
+      push:
+        - meta_scope: meta.scalar-body.typespec
+        - match: '\}'
+          captures:
+            0: punctuation.curlybrace.close.tsp
+          pop: true
+        - include: token
+        - include: directive
+        - include: scalar-constructor
+        - include: punctuation-semicolon
+  scalar-constructor:
+    - match: '\b(init)\b\s+(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)'
+      captures:
+        1: keyword.other.tsp
+        2: entity.name.function.tsp
+      push:
+        - meta_scope: meta.scalar-constructor.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: operation-parameters
+  scalar-extends:
+    - match: \b(extends)\b
+      captures:
+        1: keyword.other.tsp
+      push:
+        - meta_scope: meta.scalar-extends.typespec
+        - match: '(?=;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: expression
+        - include: punctuation-comma
+  scalar-statement:
+    - match: '\b(scalar)\b\s+(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)'
+      captures:
+        1: keyword.other.tsp
+        2: entity.name.type.tsp
+      push:
+        - meta_scope: meta.scalar-statement.typespec
+        - match: '(?<=\})|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: type-parameters
+        - include: scalar-extends
+        - include: scalar-body
+  spread-operator:
+    - match: \.\.\.
+      captures:
+        0: keyword.operator.spread.tsp
+      push:
+        - meta_scope: meta.spread-operator.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: expression
+  statement:
+    - include: token
+    - include: directive
+    - include: augment-decorator-statement
+    - include: decorator
+    - include: model-statement
+    - include: scalar-statement
+    - include: union-statement
+    - include: interface-statement
+    - include: enum-statement
+    - include: alias-statement
+    - include: const-statement
+    - include: namespace-statement
+    - include: operation-statement
+    - include: import-statement
+    - include: using-statement
+    - include: decorator-declaration-statement
+    - include: function-declaration-statement
+    - include: projection-statement
+    - include: punctuation-semicolon
+  string-literal:
+    - match: '"'
+      push:
+        - meta_scope: string.quoted.double.tsp
+        - match: '"|$'
+          pop: true
+        - include: template-expression
+        - include: escape-character
+  template-expression:
+    - match: '\$\{'
+      captures:
+        0: punctuation.definition.template-expression.begin.tsp
+      push:
+        - meta_scope: meta.template-expression.typespec
+        - match: '\}'
+          captures:
+            0: punctuation.definition.template-expression.end.tsp
+          pop: true
+        - include: expression
+  token:
+    - include: doc-comment
+    - include: line-comment
+    - include: block-comment
+    - include: triple-quoted-string-literal
+    - include: string-literal
+    - include: boolean-literal
+    - include: numeric-literal
+  triple-quoted-string-literal:
+    - match: '"""'
+      push:
+        - meta_scope: string.quoted.triple.tsp
+        - match: '"""'
+          pop: true
+        - include: template-expression
+        - include: escape-character
+  tuple-expression:
+    - match: '\['
+      captures:
+        0: punctuation.squarebracket.open.tsp
+      push:
+        - meta_scope: meta.tuple-expression.typespec
+        - match: '\]'
+          captures:
+            0: punctuation.squarebracket.close.tsp
+          pop: true
+        - include: expression
+  tuple-literal:
+    - match: '#\['
+      captures:
+        0: punctuation.hashsquarebracket.open.tsp
+      push:
+        - meta_scope: meta.tuple-literal.typespec
+        - match: '\]'
+          captures:
+            0: punctuation.squarebracket.close.tsp
+          pop: true
+        - include: expression
+        - include: punctuation-comma
+  type-annotation:
+    - match: \s*(\??)\s*(:)
+      captures:
+        1: keyword.operator.optional.tsp
+        2: keyword.operator.type.annotation.tsp
+      push:
+        - meta_scope: meta.type-annotation.typespec
+        - match: '(?=,|;|@|\)|\}|=|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: expression
+  type-argument:
+    - match: '(?:(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)\s*(=))'
+      captures:
+        1: entity.name.type.tsp
+        2: keyword.operator.assignment.tsp
+      push:
+        - meta_scope: meta.type-argument.typespec
+        - match: '='
+          captures:
+            0: keyword.operator.assignment.tsp
+          pop: true
+        - include: token
+        - include: expression
+        - include: punctuation-comma
+  type-arguments:
+    - match: <
+      captures:
+        0: punctuation.definition.typeparameters.begin.tsp
+      push:
+        - meta_scope: meta.type-arguments.typespec
+        - match: '>'
+          captures:
+            0: punctuation.definition.typeparameters.end.tsp
+          pop: true
+        - include: type-argument
+        - include: expression
+        - include: punctuation-comma
+  type-parameter:
+    - match: '(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)'
+      captures:
+        1: entity.name.type.tsp
+      push:
+        - meta_scope: meta.type-parameter.typespec
+        - match: '(?=>)|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: type-parameter-constraint
+        - include: type-parameter-default
+  type-parameter-constraint:
+    - match: extends
+      captures:
+        0: keyword.other.tsp
+      push:
+        - meta_scope: meta.type-parameter-constraint.typespec
+        - match: '(?=>)|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: expression
+  type-parameter-default:
+    - match: '='
+      captures:
+        0: keyword.operator.assignment.tsp
+      push:
+        - meta_scope: meta.type-parameter-default.typespec
+        - match: '(?=>)|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: expression
+  type-parameters:
+    - match: <
+      captures:
+        0: punctuation.definition.typeparameters.begin.tsp
+      push:
+        - meta_scope: meta.type-parameters.typespec
+        - match: '>'
+          captures:
+            0: punctuation.definition.typeparameters.end.tsp
+          pop: true
+        - include: type-parameter
+        - include: punctuation-comma
+  typeof:
+    - match: \b(typeof)
+      captures:
+        1: keyword.other.tsp
+      push:
+        - meta_scope: meta.typeof.typespec
+        - match: '(?=>)|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: expression
+  union-body:
+    - match: '\{'
+      captures:
+        0: punctuation.curlybrace.open.tsp
+      push:
+        - meta_scope: meta.union-body.typespec
+        - match: '\}'
+          captures:
+            0: punctuation.curlybrace.close.tsp
+          pop: true
+        - include: union-variant
+        - include: token
+        - include: directive
+        - include: decorator
+        - include: expression
+        - include: punctuation-comma
+  union-statement:
+    - match: '\b(union)\b\s+(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)'
+      captures:
+        1: keyword.other.tsp
+        2: entity.name.type.tsp
+      push:
+        - meta_scope: meta.union-statement.typespec
+        - match: '(?<=\})|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: union-body
+  union-variant:
+    - match: '(?:(\b[_$[:alpha:]][_$[:alnum:]]*\b|`(?:[^`\\]|\\.)*`)\s*(:))'
+      captures:
+        1: variable.name.tsp
+        2: keyword.operator.type.annotation.tsp
+      push:
+        - meta_scope: meta.union-variant.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: expression
+  using-statement:
+    - match: \b(using)\b
+      captures:
+        1: keyword.other.tsp
+      push:
+        - meta_scope: meta.using-statement.typespec
+        - match: '(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: token
+        - include: identifier-expression
+        - include: punctuation-accessor
+  valueof:
+    - match: \b(valueof)
+      captures:
+        1: keyword.other.tsp
+      push:
+        - meta_scope: meta.valueof.typespec
+        - match: '(?=>)|(?=,|;|@|\)|\}|\b(?:extern)\b|\b(?:namespace|model|op|using|import|enum|alias|union|interface|dec|fn)\b)'
+          pop: true
+        - include: expression
