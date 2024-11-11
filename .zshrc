@@ -1,3 +1,8 @@
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_CACHE_HOME=$HOME/.cache
+export XDG_DATA_HOME=$HOME/.local/share
+export XDG_STATE_HOME=$HOME/.local/state
+
 # Use emacs keymap as the default.
 bindkey -e
 
@@ -17,7 +22,9 @@ autoload -U compinit && compinit
 
 # KEY BINDINGS
 # better word navigation
-export WORDCHARS="${WORDCHARS/\//}"
+autoload -U select-word-style
+select-word-style bash
+
 # bind [delete] for forward deletion
 bindkey -M emacs "^[[3~" delete-char
 bindkey -M emacs "^[3;5~" delete-char
@@ -25,10 +32,10 @@ bindkey -M emacs "^[3;5~" delete-char
 autoload -U colors && colors
 
 # HISTORY
-HISTSIZE="10000"
-SAVEHIST="10000"
+HISTSIZE=50000
+SAVEHIST=50000
 
-HISTFILE="$HOME/.zsh_history"
+HISTFILE="$XDG_STATE_HOME/zsh/.zsh_history"
 mkdir -p "$(dirname "$HISTFILE")"
 
 setopt HIST_FCNTL_LOCK
@@ -37,18 +44,14 @@ setopt HIST_IGNORE_SPACE
 setopt APPEND_HISTORY
 
 # PROMPT
-git_branch() {
-  git symbolic-ref --short HEAD 2> /dev/null | sed -e 's/\(.*\)/ \1/'
-}
-git_hash() {
-  git rev-parse --short HEAD 2> /dev/null | sed -e 's/\(.*\)/ \1/'
+git_head() {
+  git symbolic-ref --short HEAD 2> /dev/null || git rev-parse --short HEAD 2> /dev/null
 }
 
 setopt PROMPT_SUBST
 export PROMPT='
-%B%(?.%F{green}.%F{red})%~%F{cyan}$(git_branch)%F{blue}$(git_hash)
-%F{yellow}-> %f%b'
-
+%B%(?.%F{green}.%F{red})%~ %F{cyan}$(git_head)
+%F{yellow}→ %f%b'
 
 function xtitle () {
     builtin print -n -- "\e]0;$@\a"
@@ -64,21 +67,36 @@ function preexec () {
 }
 
 # Aliases
-alias dotfiles='git --git-dir=$HOME/.git-dotfiles/ --work-tree=$HOME'
-alias la='exa -a'
-alias ll='exa -l'
-alias lla='exa -la'
-alias ls='exa'
-alias lt='exa --tree'
+alias la='eza -a'
+alias ll='eza -l'
+alias lla='eza -la'
+alias ls='eza'
+alias lt='eza --tree'
 alias vim='nvim'
+alias jqi='f() { echo "" | fzf -q "." \
+  --bind "shift-up:preview-half-page-up,shift-down:preview-half-page-down,load:unbind(enter)" \
+  --preview-window "bottom:99%" \
+  --print-query \
+  --preview "cat $1 | jq ${@:2} {q} | bat --color=always --plain -l json" \
+}; f'
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh ] && . $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh
 
 export EDITOR="nvim"
-export LESS="-R --no-init"
-export LESSHISTFILE="-"
-export BAT_THEME="ansi"
-export HOMEBREW_BUNDLE_FILE="$HOME/.dotfiles/Brewfile"
-export PATH="$HOME/.cargo/bin:$HOME/.local/bin:/usr/local/bin:$PATH"
+export HOMEBREW_BUNDLE_FILE="$HOME/dotfiles/exclude/Brewfile"
+export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+export FZF_DEFAULT_OPTS='--color=16'
+source <(fzf --zsh)
+source ~/dotfiles/submodules/fzf-git.sh/fzf-git.sh
+
+source <(zoxide init zsh)
+
+# pnpm
+export PNPM_HOME="/Users/sam/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

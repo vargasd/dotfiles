@@ -1,24 +1,61 @@
 [alias]
-	co = "checkout"
+	co = checkout
 	bco = "!f() { git checkout -b \"$(whoami)/$1\"; }; f"
-	graph = "log --pretty=author --graph --decorate"
-	overlay = "!f() { [ -d .git ] && git --git-dir=.gitoverlay --work-tree=. $@; }; f"
+	bclean = "!f() { git branch --merged origin/main | xargs git branch -D; }; f"
+	fu = commit --fixup
+	fua = commit -a --fixup
+	graph = log --graph --pretty=mine
+	g = log --graph --pretty=mine
+	ga = log --graph --all --pretty=mine
+	mt = mergetool
+	pf = push --force
+	ri = "!f() { git rebase -i ${1:-origin/main}; }; f"
+	ra = rebase --abort
+	rc = rebase --continue
+	reste = reset
+[log]
+	date = "format-local:%F %R"
 [commit]
 	gpgSign = true
+[core]
+	; pager = "less -S"
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	tabs = 2
+	syntax-theme = ansi
+[diff]
+	; tool = "difftastic"
+	colorMoved = default
+	algorithm = "histogram"
+[difftool]
+	prompt = false
+[difftool "difftastic"]
+	cmd = difft "$LOCAL" "$REMOTE"
 [fetch]
 	prune = true
+	writeCommitGraph = true
 [grep]
 	lineNumber = true
+[help]
+	autocorrect = "prompt"
 [init]
 	defaultBranch = "main"
+[pager]
+	difftool = true
 [pretty]
-	author = "%C(auto)%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s%x20%x1b[33m%C(cyan)%aN/%C(blue)%cN %C(magenta)%ai%x1b[0m"
+	mine = "%C(auto)%h%C(brightgreen bold)% (trailers:key=closes,valueonly,separator=%x2C)%C(brightblue bold)% (trailers:key=ref,valueonly,separator=%x2C) %C(auto)%s %C(cyan)%aL/%C(blue)%cL %C(magenta)%cd%C(auto)%d"
 [pull]
 	rebase = true
 [push]
-	default = "matching"
+	default = "current"
 [rebase]
-	autosquash = true
+	autoSquash = true
+	autoStash = true
+[rerere]
+	enabled = true
 [tag]
 	gpgSign = true
 [user]
@@ -26,7 +63,8 @@
 	name = "Samuel Varga"
 	signingKey = "9360638973266EE4"
 [merge]
-	tool = "nvimdiff"
+	tool = nvimdiff
+	conflictStyle = zdiff3
 [mergetool]
 	keepBackup = false
 [mergetool "nvimdiff"]

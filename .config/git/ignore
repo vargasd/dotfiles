@@ -7,3 +7,6 @@ Session.vim
 .samignore
 .helix
 .gitoverlay
+
+# ltex_ls
+.ltex_ls_cache.json
