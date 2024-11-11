@@ -1,0 +1,66 @@
+{
+	"name": "Vimium C",
+	"@time": "11/11/2024, 4:19:00 PM",
+	"time": 1731359940436,
+	"environment": {
+		"extension": "2.11.3",
+		"platform": "mac",
+		"chromium": 130
+	},
+	"exclusionRules": [
+		{
+			"passKeys": "",
+			"pattern": ":https://www.notion.so/"
+		},
+		{
+			"passKeys": "^ H L d f h j k l u ",
+			"pattern": ":https://linear.app/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://monkeytype.com/"
+		},
+		{
+			"passKeys": "t ",
+			"pattern": ":https://mail.google.com/"
+		},
+		{
+			"passKeys": "m ",
+			"pattern": ":https://meet.google.com/"
+		}
+	],
+	"keyLayout": 2,
+	"keyMappings": [
+		"#!no-check",
+		"mapKey U X",
+		"mapKey t T",
+		"mapKey J K",
+		"mapKey K J",
+		"unmap p",
+		"unmap m",
+		""
+	],
+	"linkHintCharacters": "trasneiogm",
+	"regexFindMode": true,
+	"searchUrl": "https://duckduckgo.com/?q=$s",
+	"showAdvancedCommands": false,
+	"userDefinedCss": [
+		"/* #ui */",
+		".LH {",
+		"  font-size: 15px;",
+		"  opacity: 0.7;",
+		"}",
+		"",
+		".HUD {",
+		"  top: -1px;",
+		"  bottom: auto;",
+		"  left: 50%;",
+		"  right: auto;",
+		"  padding: 0 4px 5px 4px;",
+		"  border-radius: 0 0 4px 4px;",
+		"  transform: translateX(-50%);",
+		"}",
+		""
+	],
+	"vimSync": true
+}
