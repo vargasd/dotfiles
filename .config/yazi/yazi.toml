@@ -1,0 +1,10 @@
+[manager]
+show_hidden = true
+sort_by = "natural"
+sort_reverse = false
+sort_dir_first = true
+
+[plugin]
+prepend_previewers = [
+	{ name = "*.tsp" , run = "bat" },
+]

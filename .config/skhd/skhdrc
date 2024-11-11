@@ -1,0 +1,38 @@
+#meh - q        : open -a qutebrowser
+meh - e        : open -a finder
+hyper - e      : yabai -m query --windows | jq '.[] | select(.title == "alacritty-nvim") | .id' | read winid; yabai -m window ${winid:-null} --focus || open -n -a alacritty --args --title alacritty-nvim -e "nvim"
+meh - l        : open -a 'New Relic'
+meh - v        : open -a 'Google Meet'
+meh - c        : open -a 'Google Calendar'
+meh - w        : open -a whatsapp
+meh - s        : open -a slack
+meh - d        : yabai -m query --windows | jq '.[] | select(.app == "Brave Browser" and .title == "DevTools") | .id' | read winid; yabai -m window ${winid:-null} --focus
+hyper - d      : open -a 'Visual Studio Code'
+meh - m        : open -a spotify
+hyper - m      : yabai -m query --windows | jq '.[] | select(.title == "alacritty-spotify") | .id' | read winid; yabai -m window ${winid:-null} --focus || open -n -a alacritty --args --title alacritty-spotify -e spotify_player
+meh - 0x27     : yabai -m query --windows | jq '.[] | select(.title == "alacritty-btop") | .id' | read winid; yabai -m window ${winid:-null} --focus || open -n -a alacritty --args --title alacritty-btop -e btop
+hyper - m      : open -a spotify
+meh - p        : open -a 1password
+hyper - p      : open -a passwords
+meh - i        : open -a Linear # https://linear.app
+hyper - i      : open -a "iPhone Mirroring"
+meh - t        : open -a wezterm
+meh - a        : open -a aws
+meh - b        : yabai -m query --windows | jq '.[] | select(.app == "Brave Browser") | select(.title | endswith("Brave")) | .id' | read winid; yabai -m window ${winid:-null} --focus || open -a "Brave Browser" --args --disable-smooth-scrolling
+meh - n        : open -a notion
+meh - escape   : osascript ~/dotfiles/scripts/clear-notifications.scpt
+meh - delete   : open -a ScreenSaverEngine
+
+hyper - left  : open -g "rectangle://execute-action?name=previous-display"
+hyper - up    : open -g "rectangle://execute-action?name=larger"
+hyper - down  : open -g "rectangle://execute-action?name=smaller"
+hyper - right : open -g "rectangle://execute-action?name=next-display"
+meh - left  : open -g "rectangle://execute-action?name=left-half"
+meh - up    : open -g "rectangle://execute-action?name=maximize"
+meh - right : open -g "rectangle://execute-action?name=right-half"
+meh - down  : open -g "rectangle://execute-action?name=almost-maximize"
+
+fn - h        : skhd -k left
+fn - j        : skhd -k down
+fn - k        : skhd -k up
+fn - l        : skhd -k right

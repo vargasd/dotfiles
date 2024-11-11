@@ -1,0 +1,48 @@
+theme =  "gruvbox"
+
+[editor]
+auto-pairs = false
+line-number = "relative"
+true-color = true
+mouse = false
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+
+[editor.file-picker]
+hidden = false
+
+[editor.lsp]
+goto-reference-include-declaration = false
+display-messages = true
+
+[editor.whitespace.render]
+tab = "all"
+
+[editor.whitespace.characters]
+tab = "·"
+
+[editor.soft-wrap]
+enable = true
+
+[editor.smart-tab]
+enable = false
+
+[keys.select]
+G = "goto_last_line"
+
+[keys.normal]
+G = "goto_last_line"
+S = ["goto_first_nonwhitespace", "extend_to_line_end", "delete_selection", "insert_mode"]
+V = ["extend_line_below", "select_mode"]
+x = "delete_selection"
+
+[keys.normal.space]
+w = ":write"
+q = ":buffer-close"
+R = ":lsp-restart"
+F = [":set file-picker.git-ignore false", ":set file-picker.git-exclude false", ":set file-picker.git-global false", ":set file-picker.ignore false", "file_picker"]
+G = "file_picker_in_current_buffer_directory"
+f = [":set file-picker.git-ignore true", ":set file-picker.git-exclude true", ":set file-picker.git-global true", ":set file-picker.ignore true", "file_picker"]
+">" = [":set file-picker.git-ignore false", ":set file-picker.git-exclude false", ":set file-picker.git-global false", ":set file-picker.ignore false", "global_search"]

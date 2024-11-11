@@ -1,0 +1,10 @@
+#command
+h left-scroll
+l right-scroll
+~ help
+
+#line-edit
+
+#env
+LESS=-i -R --no-init --tabs 2
+LESSHISTFILE=-
