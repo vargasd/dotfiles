@@ -3,11 +3,11 @@ local wezterm = require("wezterm")
 ---@type WeztermConfig
 local config = wezterm.config_builder()
 
--- config.tab_bar_at_bottom = true
+config.tab_bar_at_bottom = true
 config.audible_bell = "Disabled"
 config.enable_tab_bar = true
 config.use_fancy_tab_bar = false
-config.tab_max_width = 100
+config.tab_max_width = 1000
 config.show_tabs_in_tab_bar = true
 config.show_new_tab_button_in_tab_bar = false
 config.window_decorations = "RESIZE"

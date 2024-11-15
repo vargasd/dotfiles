@@ -916,95 +916,73 @@ require("lazy").setup({
 	-- { "echasnovski/mini.statusline", version = "*", opts = {} },
 	{
 		"nvim-lualine/lualine.nvim",
-		-- dependencies = {
-		-- 	"ellisonleao/gruvbox.nvim",
-		-- 	"lewis6991/gitsigns.nvim",
-		-- },
 		config = function()
-			-- local colors = require("gruvbox").palette
-			--
-			-- local function diff_source()
-			-- 	local gitsigns = vim.b.gitsigns_status_dict
-			-- 	if gitsigns then
-			-- 		return {
-			-- 			added = gitsigns.added,
-			-- 			modified = gitsigns.changed,
-			-- 			removed = gitsigns.removed,
-			-- 		}
-			-- 	end
-			-- end
-
-			-- local sections = {
-			-- 	lualine_a = {
-			-- 		{
-			-- 			color = { bg = colors.bright_yellow, fg = colors.dark0 },
-			-- 			"filename",
-			-- 			file_status = true,
-			-- 			path = 1,
-			-- 		},
-			-- 	},
-			-- 	lualine_b = { "diagnostics" },
-			-- 	lualine_c = {},
-			-- 	lualine_x = { { "diff", source = diff_source }, "encoding", "fileformat", "filetype", "location" },
-			-- 	lualine_y = { "branch" },
-			-- 	lualine_z = { "mode" },
-			-- }
-
-			require("lualine").setup({
-				sections = {
-					lualine_b = {
-						"branch",
-						{
-							"diff",
-							diff_color = {
-								added = "Added",
-								modified = "Changed",
-								removed = "Removed",
-							},
+			local winbar = {
+				lualine_a = {
+					{
+						"filename",
+						file_status = true,
+						path = 1,
+					},
+				},
+				lualine_b = {
+					"branch",
+					{
+						"diff",
+						diff_color = {
+							added = "Added",
+							modified = "Changed",
+							removed = "Removed",
 						},
-						{
-							"diagnostics",
-							diagnostics_color = {
-								error = "DiagnosticError",
-								warn = "DiagnosticWarn",
-								info = "DiagnosticInfo",
-								hint = "DiagnosticHint",
-							},
+					},
+					{
+						"diagnostics",
+						diagnostics_color = {
+							error = "DiagnosticError",
+							warn = "DiagnosticWarn",
+							info = "DiagnosticInfo",
+							hint = "DiagnosticHint",
 						},
 					},
 				},
+				lualine_x = { "encoding", "fileformat", "filetype", "location" },
+				lualine_y = { "branch" },
+				lualine_z = { "mode" },
+			}
+			require("lualine").setup({
 				options = {
 					component_separators = "|",
 					section_separators = "",
 
+					-- theme = "16color",
 					theme = {
 						normal = {
-							a = { bg = 7, fg = 0, gui = "bold" },
+							a = { bg = 7, fg = 0 },
 							b = { bg = "NONE", fg = 7 },
-							c = { bg = "NONE", fg = 8 },
+							c = { bg = "NONE", fg = 7 },
 						},
 						insert = {
-							a = { bg = "Blue", fg = 0, gui = "bold" },
+							a = { bg = "Blue", fg = 0 },
 						},
 						visual = {
-							a = { bg = "Yellow", fg = 0, gui = "bold" },
+							a = { bg = "Yellow", fg = 0 },
 						},
 						replace = {
-							a = { bg = "Red", fg = 0, gui = "bold" },
+							a = { bg = "Red", fg = 0 },
 						},
 						command = {
-							a = { bg = "Green", fg = 0, gui = "bold" },
+							a = { bg = "Green", fg = 0 },
 						},
 						inactive = {
-							a = { bg = 8, fg = 0, gui = "bold" },
+							a = { bg = 8, fg = 0 },
 						},
 					},
 				},
-				-- --#region kitty
-				-- sections = {},
-				-- winbar = sections,
-				-- inactive_winbar = sections,
-				-- --#endregion
+				-- comment rest for bottom bar
+				sections = {},
+				inactive_sections = {},
+				winbar = winbar,
+				inactive_winbar = winbar,
 			})
 		end,
 	},
@@ -1552,28 +1530,28 @@ vim.opt.fillchars.stl = " "
 vim.opt.fillchars.stlnc = " "
 
 -- --#region kitty
--- vim.o.laststatus = 0
+vim.o.laststatus = 0
 -- --#endregion kitty
 --#region alacritty/tmux
 -- set title dynamimcally by buffer
-vim.o.laststatus = 3
-vim.opt.title = true
-vim.opt.titlelen = 0
-vim.api.nvim_create_autocmd("BufEnter", {
-	callback = function(args)
-		local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
-		if buftype == "" then
-			vim.o.titlestring = vim.fn.expand("%:p:h:t")
-				.. "/"
-				.. vim.fn.expand("%:t")
-				.. " ("
-				.. vim.fn.expand("%:~:.:h:h")
-				.. ")"
-			-- else
-			-- 	vim.o.titlestring = buftype
-		end
-	end,
-})
+-- vim.o.laststatus = 3
+-- vim.opt.title = true
+-- vim.opt.titlelen = 0
+-- vim.api.nvim_create_autocmd("BufEnter", {
+-- 	callback = function(args)
+-- 		local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
+-- 		if buftype == "" then
+-- 			vim.o.titlestring = vim.fn.expand("%:p:h:t")
+-- 				.. "/"
+-- 				.. vim.fn.expand("%:t")
+-- 				.. " ("
+-- 				.. vim.fn.expand("%:~:.:h:h")
+-- 				.. ")"
+-- 			-- else
+-- 			-- 	vim.o.titlestring = buftype
+-- 		end
+-- 	end,
+-- })
 --#endregion
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
