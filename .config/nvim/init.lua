@@ -1083,24 +1083,6 @@ require("lazy").setup({
 							["ic"] = "@comment.inner",
 						},
 					},
-					move = {
-						enable = true,
-						set_jumps = true,
-						goto_next_start = {
-							["]f"] = "@function.outer",
-							["]a"] = "@parameter.outer",
-							["]]"] = "@block.inner",
-							["]c"] = "@comment.inner",
-							["]v"] = "@assignment.lhs",
-						},
-						goto_previous_start = {
-							["[f"] = "@function.outer",
-							["[a"] = "@parameter.outer",
-							["[["] = "@block.inner",
-							["[c"] = "@comment.inner",
-							["[v"] = "@assignment.lhs",
-						},
-					},
 				},
 				nvim_next = {
 					enable = true,
