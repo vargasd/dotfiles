@@ -1,0 +1,40 @@
+[colors]
+# Standard colors
+foreground = "#a1a19a"  # Base 05 (Light gray with a hint of teal)
+background = "#002635"  # Base 00 (Dark muted blue-gray)
+
+ansi = [
+	"#002635",  # Base 00 (Dark muted blue-gray)
+	"#ff4c4c",  # Base 08 (Soft red)
+	"#4caf50",  # Base 0B (Soft pastel green)
+	"#f08e48",  # Base 09 (Warm, pastel orange → dark yellow)
+	"#14747e",  # Base 0D (Soft, muted blue)
+	"#9a70a4",  # Base 0E (Pastel lavender purple)
+	"#00bcd4",  # Base 0C (Bright cyan)
+	"#fafaf8",  # Base 07 (Off-white)
+]
+brights = [
+	"#00384d",  # Base 01 (Lighter dark gray)
+	"#ff5a67",  # Base 08 (Same as normal red)
+	"#7fc06e",  # Base 0B (Same as normal green)
+	"#ffcc1b",  # Base 0A (Soft muted yellow)
+	"#1e88e5",  # Base 0D (Same as normal blue)
+	"#9a70a4",  # Base 0E (Same as normal magenta)
+	"#5dd7b9",  # Base 0C (Same as cyan)
+	"#e6e6dc",  # Base 06 (Light silvery gray)
+]
+
+# Cursor color
+cursor_bg = "#a1a19a"  # Same as foreground
+cursor_fg = "#002635"  # Same as background
+
+# Selection colors
+selection_bg = "#6C8B91"  # Base 03 (Muted teal selection background)
+selection_fg = "#a1a19a"  # Same as foreground
+
+# Scrollbar colors (optional)
+scrollbar_thumb = "#517F8D"  # Base 02 (Muted blue-gray)
+
+
+[metadata]
+name = "atlas-mod"

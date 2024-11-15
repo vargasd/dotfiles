@@ -17,11 +17,10 @@ config.use_resize_increments = false
 config.send_composed_key_when_left_alt_is_pressed = false
 config.send_composed_key_when_right_alt_is_pressed = false
 
--- config.color_scheme = "Ayu Mirage"
--- config.color_scheme = "Atlas (base16)"
--- config.color_scheme = "Arthur"
-config.color_scheme = "GruvboxDark"
+config.color_scheme = "Atlas (base16)"
+-- config.color_scheme = "GruvboxDark"
 config.color_scheme = "Popping and Locking"
+-- config.color_scheme = "atlas-mod"
 config.bold_brightens_ansi_colors = false
 
 config.keys = {
