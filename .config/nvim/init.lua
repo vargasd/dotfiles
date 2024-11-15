@@ -1441,9 +1441,10 @@ vim.keymap.set("n", "<C-q>", toggle_qf, { desc = "Close quickfix" })
 
 -- helix-inspired
 vim.keymap.set("n", "U", "<C-r>")
-vim.keymap.set({ "n", "v", "o" }, "ge", "G", { desc = "End of file" })
 vim.keymap.set({ "n", "v", "o" }, "gh", "^")
 vim.keymap.set({ "n", "v", "o" }, "gl", "$")
+-- center bottom
+vim.keymap.set("n", "G", "Gzz", { noremap = true })
 
 -- insert/command mode emacs bindings
 vim.keymap.set({ "i", "c" }, "<C-a>", "<Home>")
