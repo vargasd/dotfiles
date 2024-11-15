@@ -24,6 +24,24 @@ config.color_scheme = "GruvboxDark"
 config.color_scheme = "Popping and Locking"
 config.bold_brightens_ansi_colors = false
 
+config.keys = {
+	{
+		mods = "ALT",
+		key = "Enter",
+		action = wezterm.action.DisableDefaultAssignment,
+	},
+	{
+		mods = "CMD",
+		key = "m",
+		action = wezterm.action.DisableDefaultAssignment,
+	},
+	{
+		mods = "CMD",
+		key = "h",
+		action = wezterm.action.DisableDefaultAssignment,
+	},
+}
+
 config.window_padding = {
 	left = 0,
 	right = 0,
