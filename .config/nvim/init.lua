@@ -998,7 +998,15 @@ require("lazy").setup({
 	},
 
 	-- 'gc' to comment
-	{ "numToStr/Comment.nvim", opts = {} },
+	{
+		"numToStr/Comment.nvim",
+		config = function()
+			local ft = require("Comment.ft")
+			ft.typespec = { "//%s", "/* %s */" }
+
+			require("Comment").setup()
+		end,
+	},
 
 	{
 		"nvim-treesitter/nvim-treesitter",
