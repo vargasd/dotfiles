@@ -67,6 +67,7 @@ require("lazy").setup({
 			local dashboard = require("alpha.themes.dashboard")
 
 			-- just some silly stuff
+			math.randomseed()
 			local shuffled = {}
 			for _, v in ipairs({
 				[[███    ██ ███████  ██████  ██    ██ ██ ███    ███]],
