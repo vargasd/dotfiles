@@ -1,12 +1,12 @@
 #!/bin/bash
-dir=$(dirname "${BASH_SOURCE[0]}")
 
-brew bundle --file $dir/../exclude/Brewfile
+root=$(git rev-parse --show-toplevel)
 
-$dir/mac-settings.sh
+brew bundle --file $root/exclude/Brewfile
 
-git submodule init
-git submodule update
+$root/scripts/mac-settings.sh
+
+git submodule update --init --remote
 
 # registers additional bat themes/languages
 bat cache --build
@@ -18,3 +18,5 @@ skhd --start-service
 # install asdf tools
 cat .tool-versions | cut -d' ' -f1 | grep "^[^\#]" | xargs -I {} asdf plugin add  {}
 asdf install
+
+$root/scripts/calibre-dedrm.sh
