@@ -35,6 +35,7 @@ brew "less"
 brew "libpq", link: true
 brew "llvm"
 brew "luajit"
+brew "marp-cli"
 brew "mkcert"
 brew "neofetch"
 brew "tree-sitter"

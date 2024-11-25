@@ -532,6 +532,12 @@ require("lazy").setup({
 	-- },
 
 	{
+		"mpas/marp-nvim",
+		opts = {},
+		cmd = { "MarpStart", "MarpToggle" },
+	},
+
+	{
 		"vigoux/ltex-ls.nvim",
 		ft = { "latex", "tex", "bib", "markdown", "gitcommit", "text" },
 		config = function(self, opts)
