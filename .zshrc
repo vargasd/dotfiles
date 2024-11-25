@@ -14,8 +14,9 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
 
 brew_completion=$(brew --prefix 2>/dev/null)/share/zsh/site-functions
+my_completions=$XDG_DATA_HOME/zsh/completion
 if [ $? -eq 0 ] && [ -d "$brew_completion" ];then
-  fpath=($brew_completion $fpath)
+  fpath=($brew_completion $my_completions $fpath)
 fi
 
 autoload -U compinit && compinit
