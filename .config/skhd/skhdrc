@@ -19,20 +19,21 @@ hyper - i      : open -a "iPhone Mirroring"
 meh - t        : open -a wezterm
 meh - a        : open -a aws
 meh - b        : yabai -m query --windows | jq '.[] | select(.app == "Brave Browser") | select(.title | endswith("Brave")) | .id' | read winid; yabai -m window ${winid:-null} --focus || open -a "Brave Browser" --args --disable-smooth-scrolling
+hyper - b      : open -a safari
 meh - n        : open -a notion
 meh - escape   : osascript ~/dotfiles/scripts/clear-notifications.scpt
 meh - delete   : open -a ScreenSaverEngine
 
-hyper - left  : open -g "rectangle://execute-action?name=previous-display"
-hyper - up    : open -g "rectangle://execute-action?name=larger"
-hyper - down  : open -g "rectangle://execute-action?name=smaller"
-hyper - right : open -g "rectangle://execute-action?name=next-display"
-meh - left  : open -g "rectangle://execute-action?name=left-half"
-meh - up    : open -g "rectangle://execute-action?name=maximize"
-meh - right : open -g "rectangle://execute-action?name=right-half"
-meh - down  : open -g "rectangle://execute-action?name=almost-maximize"
+hyper - left   : open -g "rectangle://execute-action?name=previous-display"
+hyper - up     : open -g "rectangle://execute-action?name=larger"
+hyper - down   : open -g "rectangle://execute-action?name=smaller"
+hyper - right  : open -g "rectangle://execute-action?name=next-display"
+meh - left     : open -g "rectangle://execute-action?name=left-half"
+meh - up       : open -g "rectangle://execute-action?name=maximize"
+meh - right    : open -g "rectangle://execute-action?name=right-half"
+meh - down     : open -g "rectangle://execute-action?name=almost-maximize"
 
-fn - h        : skhd -k left
-fn - j        : skhd -k down
-fn - k        : skhd -k up
-fn - l        : skhd -k right
+fn - h         : skhd -k left
+fn - j         : skhd -k down
+fn - k         : skhd -k up
+fn - l         : skhd -k right
