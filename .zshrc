@@ -60,12 +60,12 @@ function xtitle () {
 
 # updates the window title whenever a command is run
 function precmd () {
-  xtitle "zsh ($(print -P %2~))"
+  xtitle $(print -P %2~)
 }
 
-function preexec () {
-  xtitle "$1 ($(print -P %2~))"
-}
+# function preexec () {
+#   xtitle "$1 ($(print -P %2~))"
+# }
 
 # Aliases
 alias la='eza -a'
