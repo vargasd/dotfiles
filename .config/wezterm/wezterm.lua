@@ -22,6 +22,7 @@ config.color_scheme = "Atlas (base16)"
 config.color_scheme = "Popping and Locking"
 -- config.color_scheme = "atlas-mod"
 config.bold_brightens_ansi_colors = false
+config.quick_select_alphabet = "arstqwfpzxcvneioluymdhgjbk"
 
 config.keys = {
 	{
@@ -38,6 +39,28 @@ config.keys = {
 		mods = "CMD",
 		key = "h",
 		action = wezterm.action.DisableDefaultAssignment,
+	},
+	{
+		key = "o",
+		mods = "CTRL|SHIFT",
+		action = wezterm.action.QuickSelectArgs({
+			patterns = { "https?://[^\\s]+" },
+			action = wezterm.action_callback(function(window, pane)
+				local url = window:get_selection_text_for_pane(pane)
+				wezterm.open_with(url)
+			end),
+		}),
+	},
+	{
+		key = "o",
+		mods = "CMD",
+		action = wezterm.action.QuickSelectArgs({
+			patterns = { "https?://[^\\s]+" },
+			action = wezterm.action_callback(function(window, pane)
+				local url = window:get_selection_text_for_pane(pane)
+				wezterm.open_with(url)
+			end),
+		}),
 	},
 }
 
