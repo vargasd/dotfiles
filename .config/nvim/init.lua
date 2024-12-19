@@ -347,6 +347,7 @@ require("lazy").setup({
 					return "<Ignore>"
 				end, { expr = true, buffer = bufnr, desc = "Jump to previous hunk" })
 				vim.keymap.set({ "n" }, "<leader>ga", gitsigns.stage_hunk)
+				vim.keymap.set({ "n" }, "<leader>g<BS>", gitsigns.reset_hunk)
 			end,
 		},
 	},
