@@ -49,6 +49,9 @@
     "curtainChangeSize" : {
       "int" : 0
     },
+    "cycleSizesIsChanged" : {
+      "bool" : true
+    },
     "disabledApps" : {
 
     },
@@ -87,6 +90,9 @@
     },
     "gapSize" : {
       "float" : 0
+    },
+    "hapticFeedbackOnSnap" : {
+      "int" : 0
     },
     "hideMenubarIcon" : {
       "bool" : true
@@ -151,8 +157,14 @@
     "screenEdgeGapTop" : {
       "float" : 0
     },
+    "screenEdgeGapTopNotch" : {
+      "float" : 0
+    },
     "screenEdgeGapsOnMainScreenOnly" : {
       "bool" : false
+    },
+    "selectedCycleSizes" : {
+      "int" : 18
     },
     "shortEdgeSnapAreaSize" : {
       "float" : 145
@@ -196,6 +208,9 @@
     "systemWideMouseDown" : {
       "int" : 0
     },
+    "systemWideMouseDownApps" : {
+
+    },
     "todo" : {
       "int" : 0
     },
@@ -222,6 +237,26 @@
     }
   },
   "shortcuts" : {
+    "centerThird" : {
+      "keyCode" : 3,
+      "modifierFlags" : 786432
+    },
+    "firstThird" : {
+      "keyCode" : 2,
+      "modifierFlags" : 786432
+    },
+    "firstTwoThirds" : {
+      "keyCode" : 14,
+      "modifierFlags" : 786432
+    },
+    "lastThird" : {
+      "keyCode" : 5,
+      "modifierFlags" : 786432
+    },
+    "lastTwoThirds" : {
+      "keyCode" : 17,
+      "modifierFlags" : 786432
+    },
     "reflowTodo" : {
       "keyCode" : 45,
       "modifierFlags" : 786432
@@ -231,5 +266,5 @@
       "modifierFlags" : 786432
     }
   },
-  "version" : "81"
+  "version" : "90"
 }
