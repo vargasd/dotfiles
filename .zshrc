@@ -60,7 +60,7 @@ function xtitle () {
 
 # updates the window title whenever a command is run
 function precmd () {
-  xtitle $(print -P %2~)
+  xtitle $(print -P %~)
 }
 
 # function preexec () {
