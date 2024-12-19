@@ -624,9 +624,7 @@ require("lazy").setup({
 				svelte = {},
 				tsp_server = {},
 				terraformls = {},
-				tailwindcss = {
-					filetypes = { "svelte" },
-				},
+				tailwindcss = {},
 				jsonls = {
 					settings = {
 						json = {
@@ -706,14 +704,6 @@ require("lazy").setup({
 						on_attach(client, bufnr)
 					end,
 					settings = {
-						probe = {
-							"javascript",
-							"javascriptreact",
-							"typescript",
-							"typescriptreact",
-							"vue",
-							"svelte",
-						},
 						workingDirectories = { mode = "auto" },
 						codeActionOnSave = { enable = true },
 					},
