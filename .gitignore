@@ -1,4 +1,5 @@
 exclude/Brewfile.lock.json
 
-# includes access key
+# include access key
 .config/op
+.config/raycast
