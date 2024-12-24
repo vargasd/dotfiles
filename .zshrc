@@ -54,18 +54,17 @@ export PROMPT='
 %B%(?.%F{green}.%F{red})%~ %F{cyan}$(git_head)
 %F{yellow}→ %f%b'
 
+ZSH_TITLE=""
 function xtitle () {
-    builtin print -n -- "\e]0;$@\a"
-}
+  if [[ $# > 0 ]]; then
+    ZSH_TITLE=$@
+  fi
 
-# updates the window title whenever a command is run
-function precmd () {
-  xtitle $(print -P %~)
+  builtin print -n -- "\e]0;${ZSH_TITLE:-${(D)PWD}}\a"
 }
+xtitle
 
-# function preexec () {
-#   xtitle "$1 ($(print -P %2~))"
-# }
+function chpwd () { xtitle }
 
 # Aliases
 alias la='eza -a'
