@@ -3,3 +3,6 @@ exclude/Brewfile.lock.json
 # include access key
 .config/op
 .config/raycast
+
+# plugins
+.config/yazi/plugins
