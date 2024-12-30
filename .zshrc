@@ -64,7 +64,7 @@ function xtitle () {
 }
 xtitle
 
-function chpwd () { xtitle }
+function precmd () { xtitle }
 
 # Aliases
 alias la='eza -a'

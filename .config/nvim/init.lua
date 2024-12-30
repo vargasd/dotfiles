@@ -915,14 +915,7 @@ require("lazy").setup({
 	{
 		"nvim-lualine/lualine.nvim",
 		config = function()
-			local winbar = {
-				lualine_a = {
-					{
-						"filename",
-						file_status = true,
-						path = 1,
-					},
-				},
+			local base_config = {
 				lualine_b = {
 					"branch",
 					{
@@ -945,14 +938,26 @@ require("lazy").setup({
 				},
 				lualine_x = { "encoding", "fileformat", "filetype", "location" },
 				lualine_y = { "branch" },
-				lualine_z = { "mode" },
 			}
+			local winbar = vim.tbl_extend("keep", base_config, {
+				lualine_a = {
+					{
+						"filename",
+						file_status = true,
+						path = 1,
+					},
+				},
+				lualine_z = { "mode" },
+			})
+			local sections = vim.tbl_extend("keep", base_config, {
+				lualine_a = { "mode" },
+			})
+
 			require("lualine").setup({
 				options = {
 					component_separators = "|",
 					section_separators = "",
 
-					-- theme = "16color",
 					theme = {
 						normal = {
 							a = { bg = 7, fg = 0 },
@@ -976,11 +981,10 @@ require("lazy").setup({
 						},
 					},
 				},
-				-- comment rest for bottom bar
-				sections = {},
-				inactive_sections = {},
-				winbar = winbar,
-				inactive_winbar = winbar,
+				sections = sections,
+				inactive_sections = sections,
+				-- winbar = winbar,
+				-- inactive_winbar = winbar,
 			})
 		end,
 	},
@@ -1518,29 +1522,35 @@ vim.o.ruler = false
 vim.opt.fillchars.stl = " "
 vim.opt.fillchars.stlnc = " "
 
--- --#region kitty
-vim.o.laststatus = 0
+-- --#region kitty/wezterm
+-- vim.o.laststatus = 0
 -- --#endregion kitty
---#region alacritty/tmux
+--#region alacritty/ghostty/tmux
 -- set title dynamimcally by buffer
--- vim.o.laststatus = 3
--- vim.opt.title = true
--- vim.opt.titlelen = 0
--- vim.api.nvim_create_autocmd("BufEnter", {
--- 	callback = function(args)
--- 		local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
--- 		if buftype == "" then
--- 			vim.o.titlestring = vim.fn.expand("%:p:h:t")
--- 				.. "/"
--- 				.. vim.fn.expand("%:t")
--- 				.. " ("
--- 				.. vim.fn.expand("%:~:.:h:h")
--- 				.. ")"
--- 			-- else
--- 			-- 	vim.o.titlestring = buftype
--- 		end
--- 	end,
--- })
+local overridetitle = ""
+vim.o.laststatus = 3
+vim.opt.title = true
+vim.opt.titlelen = 0
+vim.api.nvim_create_autocmd("BufEnter", {
+	callback = function(args)
+		local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
+		if overridetitle == "" and buftype == "" then
+			vim.o.titlestring = vim.fn.expand("%:p:h:t")
+				.. "/"
+				.. vim.fn.expand("%:t")
+				.. " ("
+				.. vim.fn.expand("%:~:.:h:h")
+				.. ")"
+			-- else
+			-- 	vim.o.titlestring = buftype
+		end
+	end,
+})
+
+vim.api.nvim_create_user_command("SetTitle", function(opts)
+	overridetitle = opts.fargs[1]
+	vim.o.titlestring = overridetitle
+end, { nargs = 1 })
 --#endregion
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
