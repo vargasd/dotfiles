@@ -840,14 +840,14 @@ require("lazy").setup({
 	},
 
 	{
-		"vargasd/enhansi.nvim",
+		"vargasd/fansi.nvim",
 		priority = 1000,
 		config = function()
-			require("enhansi").setup({
+			require("fansi").setup({
 				transparent_mode = true,
 			})
 
-			vim.cmd.colorscheme("enhansi")
+			vim.cmd.colorscheme("fansi")
 		end,
 	},
 
