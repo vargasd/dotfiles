@@ -14,7 +14,8 @@ meh - p        : open -a 1password
 hyper - p      : open -a passwords
 meh - i        : open -a Linear # https://linear.app
 hyper - i      : open -a "iPhone Mirroring"
-meh - t        : open -a wezterm
+meh - t        : open -a ghostty
+hyper - t      : open -a wezterm
 meh - a        : open -a aws
 meh - b        : yabai -m query --windows | jq '.[] | select(.app == "Brave Browser") | select(.title | endswith("Brave")) | .id' | read winid; yabai -m window ${winid:-null} --focus || open -a "Brave Browser" --args --disable-smooth-scrolling
 hyper - b      : open -a safari
