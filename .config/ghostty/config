@@ -6,10 +6,11 @@ font-feature = -liga
 font-feature = -calt
 font-feature = -dlig
 window-title-font-family = JetBrains Mono
-macos-titlebar-style = tabs
+#macos-titlebar-style = tabs
 cursor-style = block
 cursor-style-blink = false
-
+window-decoration = false
+unfocused-split-opacity = 0.7
 window-save-state = always
 
 shell-integration = zsh

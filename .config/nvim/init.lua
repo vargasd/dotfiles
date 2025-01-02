@@ -984,10 +984,12 @@ require("lazy").setup({
 						},
 					},
 				},
-				sections = sections,
-				inactive_sections = sections,
-				-- winbar = winbar,
-				-- inactive_winbar = winbar,
+				-- sections = sections,
+				-- inactive_sections = sections,
+				sections = {},
+				inactive_sections = {},
+				winbar = winbar,
+				inactive_winbar = winbar,
 			})
 		end,
 	},
@@ -1526,29 +1528,29 @@ vim.opt.fillchars.stl = " "
 vim.opt.fillchars.stlnc = " "
 
 -- --#region kitty/wezterm
--- vim.o.laststatus = 0
+vim.o.laststatus = 0
 -- --#endregion kitty
 --#region alacritty/ghostty/tmux
 -- set title dynamimcally by buffer
-local overridetitle = ""
-vim.o.laststatus = 3
-vim.opt.title = true
-vim.opt.titlelen = 0
-vim.api.nvim_create_autocmd("BufEnter", {
-	callback = function(args)
-		local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
-		if overridetitle == "" and buftype == "" then
-			vim.o.titlestring = vim.fn.expand("%:p:h:t")
-				.. "/"
-				.. vim.fn.expand("%:t")
-				.. " ("
-				.. vim.fn.expand("%:~:.:h:h")
-				.. ")"
-			-- else
-			-- 	vim.o.titlestring = buftype
-		end
-	end,
-})
+-- local overridetitle = ""
+-- -- vim.o.laststatus = 3
+-- vim.opt.title = true
+-- vim.opt.titlelen = 0
+-- vim.api.nvim_create_autocmd("BufEnter", {
+-- 	callback = function(args)
+-- 		local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
+-- 		if overridetitle == "" and buftype == "" then
+-- 			vim.o.titlestring = vim.fn.expand("%:p:h:t")
+-- 				.. "/"
+-- 				.. vim.fn.expand("%:t")
+-- 				.. " ("
+-- 				.. vim.fn.expand("%:~:.:h:h")
+-- 				.. ")"
+-- 			-- else
+-- 			-- 	vim.o.titlestring = buftype
+-- 		end
+-- 	end,
+-- })
 
 vim.api.nvim_create_user_command("SetTitle", function(opts)
 	overridetitle = opts.fargs[1]
