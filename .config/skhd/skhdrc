@@ -10,8 +10,9 @@ meh - p        : open -a 1password
 hyper - p      : open -a passwords
 meh - i        : open -a Linear # https://linear.app
 hyper - i      : open -a "iPhone Mirroring"
-meh - t        : open -a ghostty
-hyper - t      : open -a wezterm
+
+meh - t        : open -a wezterm
+hyper - t      : open -a ghostty
 
 meh - b        : open -a "Brave Browser" --args --disable-smooth-scrolling
 hyper - b      : open -a safari
