@@ -54,6 +54,8 @@
 [rebase]
 	autoSquash = true
 	autoStash = true
+[receive]
+	denyCurrentBranch = warn
 [rerere]
 	enabled = true
 [tag]
