@@ -6,3 +6,7 @@ exclude/Brewfile.lock.json
 
 # plugins
 .config/yazi/plugins
+
+# don't care/too noisy
+.config/nvim/lazy-lock.json
+
