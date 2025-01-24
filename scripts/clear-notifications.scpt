@@ -25,7 +25,7 @@ on run
 		try
 			set _main_group to group 1 of scroll area 1 of group 1 of group 1 of window 1 of application process "NotificationCenter"
 		on error eStr number eNum
-			display notification eStr with title "Error " & eNum sound name "Frog"
+			# display notification eStr with title "Error " & eNum sound name "Frog"
 			return
 		end try
 		
