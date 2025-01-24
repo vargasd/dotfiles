@@ -936,7 +936,6 @@ require("lazy").setup({
 		config = function()
 			local base_config = {
 				lualine_b = {
-					"branch",
 					{
 						"diff",
 						diff_color = {
