@@ -627,7 +627,9 @@ require("lazy").setup({
 				svelte = {},
 				tsp_server = {},
 				terraformls = {},
-				tailwindcss = {},
+				tailwindcss = {
+					filetypes = { "svelte" },
+				},
 				jsonls = {
 					settings = {
 						json = {
