@@ -1588,7 +1588,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 })
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-	pattern = { "*.keymap" },
+	pattern = { "*.keymap", "*.overlay" },
 	callback = function()
 		vim.o.filetype = "dts"
 	end,
