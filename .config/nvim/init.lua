@@ -654,19 +654,33 @@ require("lazy").setup({
 						},
 					},
 				},
-				ts_ls = {
-					settings = {
-						completions = {
-							completeFunctionCalls = true,
+				vtsls = {
+					complete_function_calls = true,
+					vtsls = {
+						enableMoveToFileCodeAction = true,
+						autoUseWorkspaceTsdk = true,
+						experimental = {
+							completion = {
+								enableServerSideFuzzyMatch = true,
+							},
 						},
 					},
-					init_options = {
-						hostInfo = "neovim",
-						preferences = {
-							includeCompletionsWithSnippetText = true,
-							includeCompletionsForImportStatements = true,
-						},
+					typescript = {
+						updateImportsOnFileMove = { enabled = "always" },
+						suggest = { completeFunctionCalls = true },
 					},
+					on_attach = function(client, bufnr)
+						-- not working; open in picker
+						vim.keymap.set("n", "gD", function()
+							local params = vim.lsp.util.make_position_params()
+							vim.lsp.buf_request(0, "workspace/executeCommand", {
+								command = "typescript.goToSourceDefinition",
+								arguments = { params.textDocument.uri, params.position },
+							}, function() end)
+						end, { desc = "TypeScript: Source Definition" })
+
+						on_attach(client, bufnr)
+					end,
 				},
 				lua_ls = {
 					settings = {
