@@ -1,8 +1,26 @@
 local wezterm = require("wezterm") --[[@as Wezterm]]
+local resurrect = wezterm.plugin.require("https://github.com/MLFlexer/resurrect.wezterm")
+local workspace_switcher = wezterm.plugin.require("https://github.com/MLFlexer/smart_workspace_switcher.wezterm")
+
 local act = wezterm.action
 
 local config = wezterm.config_builder()
-
+workspace_switcher.workspace_formatter = function(label)
+	return wezterm.format({
+		{ Attribute = { Italic = true } },
+		{ Foreground = { AnsiColor = "Green" } },
+		{ Background = { Color = "black" } },
+		{ Text = "󱂬: " .. label },
+	})
+end
+wezterm.on("gui-startup", function()
+	resurrect.resurrect_on_gui_startup()
+end)
+resurrect.periodic_save({
+	interval_seconds = 30,
+	save_windows = true,
+	save_sessions = true,
+})
 config.tab_bar_at_bottom = true
 config.audible_bell = "Disabled"
 config.enable_tab_bar = true
@@ -21,10 +39,11 @@ config.send_composed_key_when_right_alt_is_pressed = false
 -- config.color_scheme = "GruvboxDark"
 config.color_scheme = "Popping and Locking"
 -- config.color_scheme = "atlas-mod"
-config.bold_brightens_ansi_colors = false
+config.bold_brightens_ansi_colors = "No"
 config.quick_select_alphabet = "arstqwfpzxcvneioluymdhgjbk"
 -- config.unzoom_on_switch_pane = false
 
+config.leader = { key = " ", mods = "CTRL", timeout_milliseconds = 1000 }
 config.keys = {
 	{
 		mods = "ALT",
@@ -139,4 +158,22 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 	}
 end)
 
+-- loads the state whenever I create a new workspace
+wezterm.on("smart_workspace_switcher.workspace_switcher.created", function(window, path, label)
+	local workspace_state = resurrect.workspace_state
+
+	workspace_state.restore_workspace(resurrect.load_state(label, "workspace"), {
+		window = window,
+		relative = true,
+		restore_text = true,
+		on_pane_restore = resurrect.tab_state.default_on_pane_restore,
+	})
+end)
+
+-- Saves the state whenever I select a workspace
+wezterm.on("smart_workspace_switcher.workspace_switcher.selected", function(window, path, label)
+	local workspace_state = resurrect.workspace_state
+	resurrect.save_state(workspace_state.get_workspace_state())
+end)
+workspace_switcher.apply_to_config(config)
 return config
