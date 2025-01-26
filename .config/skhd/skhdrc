@@ -4,7 +4,7 @@ meh - v        : open -a 'Google Meet'
 meh - c        : open -a 'Google Calendar'
 meh - s        : open -a slack
 hyper - d      : open -a 'Visual Studio Code'
-meh - m        : open -a spotify
+meh - m        : open -a deezer
 hyper - m      : open -a messages
 meh - p        : open -a 1password
 hyper - p      : open -a passwords
