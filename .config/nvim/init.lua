@@ -1573,30 +1573,14 @@ vim.api.nvim_create_user_command("SetTitle", function(opts)
 end, { nargs = 1 })
 --#endregion
 
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-	pattern = { "*.jsonl" },
-	callback = function()
-		vim.o.filetype = "json"
-	end,
-})
-
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-	pattern = { "*.mustache" },
-	callback = function()
-		vim.o.filetype = "handlebars"
-	end,
-})
-
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-	pattern = { "*.keymap", "*.overlay" },
-	callback = function()
-		vim.o.filetype = "dts"
-	end,
-})
-
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-	pattern = { ".env.*" },
-	callback = function()
-		vim.o.filetype = "sh"
-	end,
+vim.filetype.add({
+	extension = {
+		jsonl = "json",
+		mustache = "handlebars",
+		keymap = "dts",
+		overlay = "dts",
+	},
+	pattern = {
+		[".env.*"] = "sh",
+	},
 })
