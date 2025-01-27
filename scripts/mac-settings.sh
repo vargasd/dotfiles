@@ -11,5 +11,5 @@ defaults write com.apple.dock "tilesize" -int "16"
 # disable diacritics menu
 defaults write -g ApplePressAndHoldEnabled -bool false
 
-# open deezer on play/pause
-defaults write digital.twisted.noTunes replacement /Applications/Deezer.app       
+# open on play/pause
+# defaults write digital.twisted.noTunes replacement /Applications/Deezer.app       
