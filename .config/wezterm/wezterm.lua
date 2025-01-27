@@ -3,24 +3,8 @@ local resurrect = wezterm.plugin.require("https://github.com/MLFlexer/resurrect.
 local workspace_switcher = wezterm.plugin.require("https://github.com/MLFlexer/smart_workspace_switcher.wezterm")
 
 local act = wezterm.action
-
 local config = wezterm.config_builder()
-workspace_switcher.workspace_formatter = function(label)
-	return wezterm.format({
-		{ Attribute = { Italic = true } },
-		{ Foreground = { AnsiColor = "Green" } },
-		{ Background = { Color = "black" } },
-		{ Text = "󱂬: " .. label },
-	})
-end
-wezterm.on("gui-startup", function()
-	resurrect.resurrect_on_gui_startup()
-end)
-resurrect.periodic_save({
-	interval_seconds = 30,
-	save_windows = true,
-	save_sessions = true,
-})
+
 config.tab_bar_at_bottom = true
 config.audible_bell = "Disabled"
 config.enable_tab_bar = true
@@ -175,5 +159,22 @@ wezterm.on("smart_workspace_switcher.workspace_switcher.selected", function(wind
 	local workspace_state = resurrect.workspace_state
 	resurrect.save_state(workspace_state.get_workspace_state())
 end)
+workspace_switcher.workspace_formatter = function(label)
+	return wezterm.format({
+		{ Attribute = { Italic = true } },
+		{ Foreground = { AnsiColor = "Green" } },
+		{ Background = { Color = "black" } },
+		{ Text = "󱂬: " .. label },
+	})
+end
+wezterm.on("gui-startup", function()
+	resurrect.resurrect_on_gui_startup()
+end)
+resurrect.periodic_save({
+	interval_seconds = 60 * 5,
+	save_windows = true,
+	save_sessions = true,
+})
+
 workspace_switcher.apply_to_config(config)
 return config
