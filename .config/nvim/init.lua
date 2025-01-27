@@ -654,20 +654,40 @@ require("lazy").setup({
 						},
 					},
 				},
-				vtsls = {
-					complete_function_calls = true,
-					vtsls = {
-						enableMoveToFileCodeAction = true,
-						autoUseWorkspaceTsdk = true,
-						experimental = {
-							completion = {
-								enableServerSideFuzzyMatch = true,
-							},
+				ts_ls = {
+					settings = {
+						completions = {
+							completeFunctionCalls = true,
 						},
 					},
-					typescript = {
-						updateImportsOnFileMove = { enabled = "always" },
-						suggest = { completeFunctionCalls = true },
+					init_options = {
+						hostInfo = "neovim",
+						preferences = {
+							includeCompletionsWithSnippetText = true,
+							includeCompletionsForImportStatements = true,
+						},
+					},
+				},
+				vtsls = {
+					autostart = false,
+					settings = {
+						complete_function_calls = true,
+						vtsls = {
+							enableMoveToFileCodeAction = true,
+							autoUseWorkspaceTsdk = true,
+							experimental = {
+								completion = {
+									enableServerSideFuzzyMatch = true,
+								},
+							},
+						},
+						typescript = {
+							updateImportsOnFileMove = { enabled = "always" },
+							suggest = { completeFunctionCalls = true },
+							tsserver = {
+								maxTsServerMemory = 8192,
+							},
+						},
 					},
 					on_attach = function(client, bufnr)
 						-- not working; open in picker
@@ -735,22 +755,20 @@ require("lazy").setup({
 			local mason_lspconfig = require("mason-lspconfig")
 
 			mason_lspconfig.setup({
+				automatic_installation = true,
 				ensure_installed = vim.tbl_keys(servers),
 			})
 
 			mason_lspconfig.setup_handlers({
 				function(server_name)
-					require("lspconfig")[server_name].setup({
+					require("lspconfig")[server_name].setup(vim.tbl_extend("keep", servers[server_name], {
 						capabilities = capabilities,
 						on_init = function(client)
 							-- treesitter does our highlighting, thanks
 							client.server_capabilities.semanticTokensProvider = nil
 						end,
-						on_attach = (servers[server_name] or {}).on_attach or on_attach,
-						settings = (servers[server_name] or {}).settings,
-						init_options = (servers[server_name] or {}).init_options,
-						filetypes = (servers[server_name] or {}).filetypes,
-					})
+						on_attach = on_attach,
+					}))
 				end,
 			})
 		end,
