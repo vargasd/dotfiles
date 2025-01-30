@@ -166,7 +166,7 @@ require("lazy").setup({
 		keys = {
 			{
 				"s",
-				mode = { "n", "x" },
+				mode = { "n", "v" },
 				function()
 					require("flash").jump({
 						search = {
