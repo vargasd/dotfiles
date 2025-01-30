@@ -1343,31 +1343,6 @@ require("lazy").setup({
 			open_for_directories = true,
 		},
 	},
-
-	{
-		"renerocksai/telekasten.nvim",
-		dependencies = { "nvim-telescope/telescope.nvim" },
-		cmd = "Telekasten",
-		init = function()
-			vim.keymap.set("n", "<leader>Z", "<cmd>Telekasten panel<CR>")
-
-			vim.keymap.set("n", "<leader>zf", "<cmd>Telekasten find_notes<CR>")
-			vim.keymap.set("n", "<leader>z/", "<cmd>Telekasten search_notes<CR>")
-			vim.keymap.set("n", "<leader>zc", "<cmd>Telekasten goto_today<CR>")
-			vim.keymap.set("n", "<leader>zz", "<cmd>Telekasten follow_link<CR>")
-			vim.keymap.set("n", "<leader>zn", "<cmd>Telekasten new_note<CR>")
-		end,
-		config = function()
-			local home = vim.fn.stdpath("data") .. "/../zettelkasten/"
-			require("telekasten").setup({
-				home = home,
-				template_handling = "new_note",
-				template_new_note = home .. "/templates/new_note.md",
-				template_new_daily = home .. "/templates/new_note.md",
-				auto_set_filetype = false,
-			})
-		end,
-	},
 }, { rocks = { enabled = false } })
 
 -- Diagnostics
