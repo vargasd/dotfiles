@@ -1,11 +1,11 @@
 {
 	"name": "Vimium C",
-	"@time": "11/11/2024, 4:19:00 PM",
-	"time": 1731359940436,
+	"@time": "1/30/2025, 7:41:08 AM",
+	"time": 1738240868369,
 	"environment": {
 		"extension": "2.11.3",
 		"platform": "mac",
-		"chromium": 130
+		"chromium": 132
 	},
 	"exclusionRules": [
 		{
@@ -13,7 +13,7 @@
 			"pattern": ":https://www.notion.so/"
 		},
 		{
-			"passKeys": "^ H L d f h j k l u ",
+			"passKeys": "^ d f o t u ",
 			"pattern": ":https://linear.app/"
 		},
 		{
@@ -38,11 +38,26 @@
 		"mapKey K J",
 		"unmap p",
 		"unmap m",
+		"unmap /",
 		""
 	],
 	"linkHintCharacters": "trasneiogm",
 	"regexFindMode": true,
-	"searchUrl": "https://duckduckgo.com/?q=$s",
+	"searchEngines": [
+		"g: https://www.google.com/search?q=%s \\",
+		"  www.google.com re=/^(?:\\.[a-z]{2,4})?\\/search\\b.*?[#&?]q=([^#&]*)/i \\",
+		"  blank=https://www.google.com/ Google",
+		"b: https://search.brave.com/search?q=%s Brave",
+		"d: https://duckduckgo.com/?q=%s DuckDuckGo",
+		"gm|maps: https://www.google.com/maps?q=%s \\",
+		"w|wiki: https://www.wikipedia.org/w/index.php?search=%s Wikipedia",
+		"\\:i: vimium://sed/s/^//,lower\\ $S re= Lower case",
+		"v.m|math: vimium://math\\ $S re= Calculate",
+		"gh|github: https://github.com/search?q=$s \\",
+		"  blank=https://github.com/ GitHub Repo",
+		""
+	],
+	"searchUrl": "https://www.google.com/search?q=$s Google",
 	"showAdvancedCommands": false,
 	"userDefinedCss": [
 		"/* #ui */",
