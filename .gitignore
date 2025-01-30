@@ -9,4 +9,5 @@ exclude/Brewfile.lock.json
 
 # don't care/too noisy
 .config/nvim/lazy-lock.json
+.config/btop/btop.log
 
