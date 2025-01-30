@@ -304,7 +304,6 @@ require("lazy").setup({
 
 	{
 		"lewis6991/gitsigns.nvim",
-		dependencies = { "ghostbuster91/nvim-next" },
 		opts = {
 			current_line_blame = true,
 			current_line_blame_opts = {
@@ -511,26 +510,6 @@ require("lazy").setup({
 	},
 
 	{ "folke/which-key.nvim", opts = {} },
-
-	-- {
-	-- 	"pmizio/typescript-tools.nvim",
-	-- 	dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-	-- 	opts = {
-	-- 		settings = {
-	-- 			expose_as_code_action = { "remove_unused_imports", "add_missing_imports" },
-	-- 			complete_function_calls = true,
-	-- 		},
-	-- 		on_attach = function(client)
-	-- 			vim.keymap.set(
-	-- 				"n",
-	-- 				"gD",
-	-- 				vim.cmd.TSToolsGoToSourceDefinition,
-	-- 				{ desc = "TypeScript: Source Definition" }
-	-- 			)
-	-- 			client.server_capabilities.semanticTokensProvider = nil
-	-- 		end,
-	-- 	},
-	-- },
 
 	{
 		"mpas/marp-nvim",
@@ -952,7 +931,6 @@ require("lazy").setup({
 		end,
 	},
 
-	-- { "echasnovski/mini.statusline", version = "*", opts = {} },
 	{
 		"nvim-lualine/lualine.nvim",
 		config = function()
