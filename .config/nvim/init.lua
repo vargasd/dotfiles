@@ -224,7 +224,7 @@ require("lazy").setup({
 		"jedrzejboczar/possession.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		config = function()
-			vim.o.sessionoptions = "buffers,curdir,help,tabpages,winsize,terminal"
+			vim.o.sessionoptions = "buffers,curdir"
 			local possession = require("possession")
 			possession.setup({
 				autosave = {
