@@ -897,7 +897,6 @@ require("lazy").setup({
 
 	{
 		"hedyhli/outline.nvim",
-		cmd = { "Outline", "OutlineOpen" },
 		keys = {
 			{ "<leader>O", vim.cmd.Outline, desc = "Toggle outline" },
 		},
@@ -926,9 +925,6 @@ require("lazy").setup({
 			"nvim-tree/nvim-web-devicons",
 			"nvim-telescope/telescope.nvim",
 		},
-		init = function()
-			require("telescope").load_extension("aerial")
-		end,
 	},
 
 	{
@@ -1012,6 +1008,7 @@ require("lazy").setup({
 	{
 		"lukas-reineke/indent-blankline.nvim",
 		main = "ibl",
+		event = "InsertEnter",
 		opts = {
 			indent = { char = "·" },
 			scope = { enabled = false },
@@ -1022,6 +1019,7 @@ require("lazy").setup({
 	-- 'gc' to comment
 	{
 		"numToStr/Comment.nvim",
+		event = "VeryLazy",
 		config = function()
 			local ft = require("Comment.ft")
 			ft.typespec = { "//%s", "/* %s */" }
@@ -1142,6 +1140,7 @@ require("lazy").setup({
 
 	{
 		"kevinhwang91/nvim-ufo",
+		event = "VeryLazy",
 		dependencies = { "kevinhwang91/promise-async" },
 		config = function()
 			local ufo = require("ufo")
@@ -1163,6 +1162,7 @@ require("lazy").setup({
 
 	{
 		"ghostbuster91/nvim-next",
+		event = "VeryLazy",
 		config = function()
 			local builtins = require("nvim-next.builtins")
 			local move = require("nvim-next.move")
@@ -1265,17 +1265,16 @@ require("lazy").setup({
 
 	{
 		"mg979/vim-visual-multi",
-		config = function()
-			vim.keymap.set("n", "<M-J>", "<Plug>(VM-Add-Cursor-Down)", {})
-			vim.keymap.set("n", "<M-K>", "<Plug>(VM-Add-Cursor-Up)", {})
-		end,
+		keys = {
+			{ "<M-J>", "<Plug>(VM-Add-Cursor-Down)" },
+			{ "<M-K>", "<Plug>(VM-Add-Cursor-Up)" },
+			{ "<C-n>", "<Plug>(VM-Find-Under)" },
+		},
 	},
 
 	{
 		"mbbill/undotree",
-		cmd = {
-			"UndotreeShow",
-		},
+		cmd = { "UndotreeShow" },
 		init = function()
 			vim.g.undotree_DiffAutoOpen = 0
 			vim.keymap.set("n", "<leader>u", function()
@@ -1329,22 +1328,16 @@ require("lazy").setup({
 	---@type LazySpec
 	{
 		"mikavilpas/yazi.nvim",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-		},
-		event = "VeryLazy",
 		keys = {
 			{
 				"<leader>e",
-				function()
-					require("yazi").yazi()
-				end,
+				vim.cmd.Yazi,
 				{ desc = "Open the file manager at buffer" },
 			},
 			{
 				"<leader>E",
 				function()
-					require("yazi").yazi(nil, vim.fn.getcwd())
+					vim.cmd.Yazi("cwd")
 				end,
 				{ desc = "Open the file manager at cwd" },
 			},
