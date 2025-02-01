@@ -1290,31 +1290,28 @@ require("lazy").setup({
 			"FloatermToggle",
 			"FloatermNew",
 		},
+		keys = {
+			{
+				"<leader>t",
+				vim.cmd.FloatermToggle,
+				{ desc = "Terminal" },
+			},
+			{
+				"<leader>T",
+				"<cmd>FloatermNew! --disposable cd %:p:h<CR>",
+				{ desc = "Terminal at current dir" },
+			},
+		},
 		init = function()
 			vim.g.floaterm_opener = "edit"
 			vim.g.floaterm_height = 0.9
 			vim.g.floaterm_width = 0.9
-
-			vim.keymap.set("n", "<leader>t", function()
-				vim.cmd.FloatermToggle("main")
-			end, { desc = "Terminal" })
-
-			vim.keymap.set(
-				"n",
-				"<leader>T",
-				":FloatermNew! --disposable cd %:p:h<CR>",
-				{ silent = true, desc = "Terminal at current dir" }
-			)
 
 			for i = 0, 9 do
 				vim.keymap.set("n", "<leader>" .. i, function()
 					vim.cmd.FloatermToggle("terminal " .. i)
 				end, { desc = "Terminal " .. i })
 			end
-
-			vim.keymap.set("n", "<leader>G", function()
-				vim.cmd.FloatermNew("lazygit")
-			end, { desc = "lazygit" })
 
 			vim.api.nvim_create_autocmd("TermOpen", {
 				callback = function(args)
@@ -1323,6 +1320,26 @@ require("lazy").setup({
 				end,
 			})
 		end,
+	},
+
+	{
+		"chomosuke/term-edit.nvim",
+		event = "TermOpen",
+		version = "1.*",
+		opts = {
+			prompt_end = "%→ ",
+		},
+	},
+
+	{
+		"kdheepak/lazygit.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+		},
+		keys = {
+			{ "<leader>G", vim.cmd.LazyGit, desc = "LazyGit" },
+			{ "<leader>gh", vim.cmd.LazyGitFilterCurrentFile, desc = "Show file commits" },
+		},
 	},
 
 	---@type LazySpec
@@ -1389,7 +1406,7 @@ vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 vim.keymap.set("n", "<Up>", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set("n", "<Down>", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
-vim.keymap.set("n", "<esc>", "<cmd>nohlsearch<CR>")
+vim.keymap.set({ "n", "t" }, "<esc>", "<cmd>nohlsearch<CR><esc>")
 
 -- reduce pinky stress
 vim.keymap.set("n", "<leader>q", vim.cmd.bdelete, { desc = "Quit buffer" })
