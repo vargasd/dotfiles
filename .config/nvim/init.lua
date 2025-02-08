@@ -1236,8 +1236,8 @@ require("lazy").setup({
 	{
 		"mg979/vim-visual-multi",
 		keys = {
-			{ "<M-J>", "<Plug>(VM-Add-Cursor-Down)" },
-			{ "<M-K>", "<Plug>(VM-Add-Cursor-Up)" },
+			{ "<C-Down>", "<Plug>(VM-Add-Cursor-Down)" },
+			{ "<C-Up>", "<Plug>(VM-Add-Cursor-Up)" },
 			{ "<C-n>", "<Plug>(VM-Find-Under)" },
 		},
 	},
