@@ -223,6 +223,26 @@ require("lazy").setup({
 	{
 		"jedrzejboczar/possession.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
+
+		keys = {
+			{
+				"<leader>sf",
+				function()
+					require("telescope").extensions.possession.list()
+				end,
+				desc = "session find",
+			},
+			{
+				"<leader>S",
+				function()
+					local session_name = vim.fn.input("(name) ")
+					if (session_name or "") ~= "" then
+						require("possession").save(session_name)
+					end
+				end,
+				desc = "session save",
+			},
+		},
 		config = function()
 			vim.o.sessionoptions = "buffers,curdir"
 			local possession = require("possession")
@@ -264,41 +284,38 @@ require("lazy").setup({
 					},
 				},
 			})
-
-			require("telescope").load_extension("possession")
-			vim.keymap.set(
-				"n",
-				"<leader>sf",
-				require("telescope").extensions.possession.list,
-				{ desc = "session find" }
-			)
-
-			vim.keymap.set("n", "<leader>S", function()
-				local session_name = vim.fn.input("(name) ")
-				if (session_name or "") ~= "" then
-					possession.save(session_name)
-				end
-			end, { desc = "session save" })
 		end,
 	},
 
 	{
 		"tpope/vim-fugitive",
 		cmd = { "Git", "Gdiffsplit" },
+		keys = {
+			{
+				"<leader>gb",
+				function()
+					vim.cmd.Git("blame")
+				end,
+				desc = "Git Blame",
+			},
+			{ "<leader>gd", vim.cmd.Gdiffsplit, desc = "Git Diff" },
+			{
+				"<leader>g<Left>",
+				function()
+					vim.cmd.diffget("LOCAL")
+				end,
+				desc = "Git local changes",
+			},
+			{
+				"<leader>g<Right>",
+				function()
+					vim.cmd.diffget("REMOTE")
+				end,
+				desc = "Git remote changes",
+			},
+		},
 		init = function()
 			vim.g.fugitive_dynamic_colors = 0
-			vim.keymap.set("n", "<leader>gb", function()
-				vim.cmd.Git("blame")
-			end, { desc = "Git Blame" })
-			vim.keymap.set("n", "<leader>gd", vim.cmd.Gdiffsplit, { desc = "Git Diff" })
-
-			-- other git keymapping
-			vim.keymap.set("n", "<leader>g<Left>", function()
-				vim.cmd.diffget("LOCAL")
-			end, { desc = "Git local changes" })
-			vim.keymap.set("n", "<leader>g<Right>", function()
-				vim.cmd.diffget("REMOTE")
-			end, { desc = "Git remote changes" })
 		end,
 	},
 
@@ -321,33 +338,49 @@ require("lazy").setup({
 				changedelete = { text = "~" },
 				untracked = { text = "┆" },
 			},
-			on_attach = function(bufnr)
-				local gitsigns = require("gitsigns")
-				local next_integrations = require("nvim-next.integrations")
-				local next_gs = next_integrations.gitsigns(gitsigns)
-
-				-- don't override the built-in and fugitive keymaps
-				vim.keymap.set({ "n", "v" }, "]g", function()
+		},
+		keys = {
+			-- don't override the built-in and fugitive keymaps
+			{
+				"]g",
+				function()
 					if vim.wo.diff then
 						return "]g"
 					end
 					vim.schedule(function()
-						next_gs.next_hunk()
+						require("nvim-next.integrations").gitsigns(require("gitsigns")).next_hunk()
 					end)
 					return "<Ignore>"
-				end, { expr = true, buffer = bufnr, desc = "Jump to next hunk" })
-				vim.keymap.set({ "n", "v" }, "[g", function()
+				end,
+				{ expr = true, desc = "Jump to next hunk" },
+				{ "n", "v" },
+			},
+			{
+				"[g",
+				function()
 					if vim.wo.diff then
 						return "[g"
 					end
 					vim.schedule(function()
-						next_gs.prev_hunk()
+						require("nvim-next.integrations").gitsigns(require("gitsigns")).prev_hunk()
 					end)
 					return "<Ignore>"
-				end, { expr = true, buffer = bufnr, desc = "Jump to previous hunk" })
-				vim.keymap.set({ "n" }, "<leader>ga", gitsigns.stage_hunk)
-				vim.keymap.set({ "n" }, "<leader>g<BS>", gitsigns.reset_hunk)
-			end,
+				end,
+				{ expr = true, desc = "Jump to previous hunk" },
+				{ "n", "v" },
+			},
+			{
+				"<leader>ga",
+				function()
+					require("gitsigns").stage_hunk()
+				end,
+			},
+			{
+				"<leader>g<BS>",
+				function()
+					require("gitsigns").reset_hunk()
+				end,
+			},
 		},
 	},
 
@@ -837,7 +870,7 @@ require("lazy").setup({
 				},
 			})
 
-			vim.keymap.set("i", "<C-x>", cmp.complete, {})
+			vim.keymap.set("i", "<C-x>", cmp.complete)
 		end,
 	},
 
@@ -1245,12 +1278,18 @@ require("lazy").setup({
 	{
 		"mbbill/undotree",
 		cmd = { "UndotreeShow" },
+		keys = {
+			{
+				"<leader>u",
+				function()
+					vim.cmd.UndotreeShow()
+					vim.cmd.UndotreeFocus()
+				end,
+				desc = "Undo tree",
+			},
+		},
 		init = function()
 			vim.g.undotree_DiffAutoOpen = 0
-			vim.keymap.set("n", "<leader>u", function()
-				vim.cmd.UndotreeShow()
-				vim.cmd.UndotreeFocus()
-			end, { desc = "Undo tree" })
 		end,
 	},
 
@@ -1264,12 +1303,12 @@ require("lazy").setup({
 			{
 				"<leader>t",
 				vim.cmd.FloatermToggle,
-				{ desc = "Terminal" },
+				desc = "Terminal",
 			},
 			{
 				"<leader>T",
 				"<cmd>FloatermNew! --disposable cd %:p:h<CR>",
-				{ desc = "Terminal at current dir" },
+				desc = "Terminal at current dir",
 			},
 		},
 		init = function()
@@ -1319,14 +1358,14 @@ require("lazy").setup({
 			{
 				"<leader>e",
 				vim.cmd.Yazi,
-				{ desc = "Open the file manager at buffer" },
+				desc = "Open the file manager at buffer",
 			},
 			{
 				"<leader>E",
 				function()
 					vim.cmd.Yazi("cwd")
 				end,
-				{ desc = "Open the file manager at cwd" },
+				desc = "Open the file manager at cwd",
 			},
 		},
 		opts = {
@@ -1341,8 +1380,6 @@ for type, icon in pairs(signs) do
 	local hl = "DiagnosticSign" .. type
 	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
-
-vim.keymap.set("n", "H", vim.diagnostic.open_float, { desc = "Open Diagnostics Float" })
 
 vim.diagnostic.config({
 	virtual_text = {
@@ -1366,38 +1403,6 @@ vim.api.nvim_create_user_command("W", "write", {})
 vim.api.nvim_create_user_command("Q", "quit", {})
 vim.api.nvim_create_user_command("Wq", "wq", {})
 vim.api.nvim_create_user_command("WQ", "wq", {})
-
--- no space ops since it's the leader
-vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
-
--- display linewise movement
-vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-vim.keymap.set("n", "<Up>", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set("n", "<Down>", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-
-vim.keymap.set({ "n", "t" }, "<esc>", "<cmd>nohlsearch<CR><esc>")
-
--- reduce pinky stress
-vim.keymap.set("n", "<leader>q", vim.cmd.bdelete, { desc = "Quit buffer" })
-vim.keymap.set("n", "<leader>Q", function()
-	vim.cmd.bdelete({ bang = true })
-end, { desc = "Force quit buffer" })
-vim.keymap.set("n", "<leader><c-q>", function()
-	vim.cmd.qall({ bang = true })
-end, { desc = "Force quit all" })
-vim.keymap.set("n", "q", "<Nop>", { silent = true }) -- q gets way too annoying if accidentally pressed
-vim.keymap.set("n", "Q", "q", {})
-vim.keymap.set("n", "<leader>w", vim.cmd.write, { desc = "Write" })
-vim.keymap.set("n", "<leader>W", vim.cmd.wall, { desc = "Write" })
-
--- clipboard
-vim.keymap.set("n", "<leader>YA", ':let @+=expand("%:p")<CR>', { silent = true, desc = "Yank Absolute path" })
-vim.keymap.set("n", "<leader>YF", ':let @+=expand("%:t")<CR>', { silent = true, desc = "Yank File name" })
-vim.keymap.set("n", "<leader>YR", ':let @+=expand("%")<CR>', { silent = true, desc = "Yank Relative path" })
-vim.keymap.set({ "n", "v" }, "<leader>y", '"*y', { desc = "Yank to system clipboard" })
-vim.keymap.set({ "n", "v" }, "<leader>p", '"*p', { desc = "Paste from system clipboard" })
-vim.keymap.set({ "n", "v" }, "<leader>P", '"*P', { desc = "Paste from system clipboard" })
 
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -1425,51 +1430,12 @@ local toggle_qf = function()
 	end
 end
 
-vim.keymap.set("n", "<C-w>t", "<C-w>T", { desc = "Send to tab" })
-vim.keymap.set("n", "[t", vim.cmd.tabprevious, { desc = "Previous tab" })
-vim.keymap.set("n", "]t", vim.cmd.tabnext, { desc = "Next tab" })
-
-vim.keymap.set("n", "gi", function()
-	local issue = vim.fn.expand("<cword>")
-	os.execute("open https://linear.app/tildei/issue/" .. issue)
-end, { desc = "Open issue under cursor" })
-
-vim.keymap.set("n", "<C-q>", toggle_qf, { desc = "Close quickfix" })
-
--- helix-inspired
-vim.keymap.set("n", "U", "<C-r>")
-vim.keymap.set({ "n", "v", "o" }, "gh", "^")
-vim.keymap.set({ "n", "v", "o" }, "gl", "$")
--- center bottom
-vim.keymap.set("n", "G", "Gzz", { noremap = true })
-
--- insert/command mode emacs bindings
-vim.keymap.set({ "i", "c" }, "<C-a>", "<Home>")
-vim.keymap.set({ "i", "c" }, "<C-b>", "<Left>")
-vim.keymap.set({ "i", "c" }, "<C-d>", "<Del>")
-vim.keymap.set({ "i", "c" }, "<C-e>", "<End>")
-vim.keymap.set({ "i", "c" }, "<C-f>", "<Right>")
-vim.keymap.set({ "i", "c" }, "<C-n>", "<Down>")
-vim.keymap.set({ "i", "c" }, "<C-p>", "<Up>")
-vim.keymap.set({ "i", "c" }, "<M-b>", "<S-Left>")
-vim.keymap.set({ "i", "c" }, "<M-f>", "<S-Right>")
-
 -- Use lowercase for global marks and uppercase for local marks.
 local lower = function(i)
 	return string.char(97 + i)
 end
 local upper = function(i)
 	return string.char(65 + i)
-end
-
-for i = 0, 25 do
-	vim.keymap.set("n", "m" .. lower(i), "m" .. upper(i))
-	vim.keymap.set("n", "'" .. lower(i), "'" .. upper(i))
-	vim.keymap.set("n", "`" .. lower(i), "`" .. upper(i))
-	vim.keymap.set("n", "<Tab>" .. lower(i), "`" .. upper(i))
-	-- vim.keymap.set("n", "m" .. upper(i), "m" .. lower(i))
-	-- vim.keymap.set("n", "'" .. upper(i), "'" .. lower(i))
-	-- vim.keymap.set("n", "`" .. upper(i), "`" .. lower(i))
 end
 
 vim.o.undodir = vim.fn.stdpath("state") .. "/undo//"
@@ -1541,9 +1507,6 @@ vim.api.nvim_create_user_command("SetTitle", function(opts)
 end, { nargs = 1 })
 --#endregion
 
---vim.api.nvim_create_autocmd()
---autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
-
 vim.filetype.add({
 	extension = {
 		jsonl = "json",
@@ -1555,3 +1518,87 @@ vim.filetype.add({
 		[".env.*"] = "sh",
 	},
 })
+
+---@class KeyMapOpts: vim.keymap.set.Opts
+---@field mode? string | string[]
+---@type [string, string|function, KeyMapOpts?][]
+local mappings = {
+	{ "H", vim.diagnostic.open_float, { desc = "Open Diagnostics Float" } },
+	-- Undo should be shift-u
+	{ "U", "<C-r>" },
+	-- center bottom
+	{ "G", "Gzz", { noremap = true } },
+	-- no space ops since it's the leader
+	{ "<Space>", "<Nop>", { silent = true, mode = { "n", "v" } } },
+	-- unhighlight on esc
+	{ "<esc>", "<cmd>nohlsearch<CR><esc>", { mode = { "n", "t" } } },
+
+	-- UI Line movement
+	{ "<Up>", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true } },
+	{ "<Down>", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true } },
+
+	-- insert/command mode emacs bindings
+	{ "<C-a>", "<Home>", { mode = { "i", "c" } } },
+	{ "<C-b>", "<Left>", { mode = { "i", "c" } } },
+	{ "<C-d>", "<Del>", { mode = { "i", "c" } } },
+	{ "<C-e>", "<End>", { mode = { "i", "c" } } },
+	{ "<C-f>", "<Right>", { mode = { "i", "c" } } },
+	{ "<C-n>", "<Down>", { mode = { "i", "c" } } },
+	{ "<C-p>", "<Up>", { mode = { "i", "c" } } },
+	{ "<M-b>", "<S-Left>", { mode = { "i", "c" } } },
+	{ "<M-f>", "<S-Right>", { mode = { "i", "c" } } },
+
+	-- clipboard
+	{ "<leader>YA", ':let @+=expand("%:p")<CR>', { silent = true, desc = "Yank Absolute path" } },
+	{ "<leader>YF", ':let @+=expand("%:t")<CR>', { silent = true, desc = "Yank File name" } },
+	{ "<leader>YR", ':let @+=expand("%")<CR>', { silent = true, desc = "Yank Relative path" } },
+	{ "<leader>y", '"*y', { desc = "Yank to system clipboard", mode = { "n", "v" } } },
+	{ "<leader>p", '"*p', { desc = "Paste from system clipboard", mode = { "n", "v" } } },
+	{ "<leader>P", '"*P', { desc = "Paste from system clipboard", mode = { "n", "v" } } },
+
+	-- tabby stuff
+	{ "<C-w>t", "<C-w>T", { desc = "Send to tab" } },
+	{ "[t", vim.cmd.tabprevious, { desc = "Previous tab" } },
+	{ "]t", vim.cmd.tabnext, { desc = "Next tab" } },
+
+	{ "<C-q>", toggle_qf, { desc = "Close quickfix" } },
+
+	-- quitty stuff
+	{ "<leader>q", vim.cmd.bdelete, { desc = "Quit buffer" } },
+	{
+		"<leader>Q",
+		function()
+			vim.cmd.bdelete({ bang = true })
+		end,
+		{ desc = "Force quit buffer" },
+	},
+	{
+		"<leader><c-q>",
+		function()
+			vim.cmd.qall({ bang = true })
+		end,
+		{ desc = "Force quit all" },
+	},
+
+	-- I hate accidentally macroing
+	{ "q", "<Nop>", { silent = true } },
+	{ "Q", "q", {} },
+
+	-- savey stuff
+	{ "<leader>w", vim.cmd.write, { desc = "Write" } },
+	{ "<leader>W", vim.cmd.wall, { desc = "Write" } },
+}
+
+for _, mapping in ipairs(mappings) do
+	local mode = mapping[3] and mapping[3].mode or "n";
+	(mapping[3] or {})["mode"] = nil
+	vim.keymap.set(mode, mapping[1], mapping[2], mapping[3])
+end
+
+-- marks my way
+for i = 0, 25 do
+	vim.keymap.set("n", "m" .. lower(i), "m" .. upper(i))
+	vim.keymap.set("n", "'" .. lower(i), "'" .. upper(i))
+	vim.keymap.set("n", "`" .. lower(i), "`" .. upper(i))
+	vim.keymap.set("n", "<Tab>" .. lower(i), "`" .. upper(i))
+end
