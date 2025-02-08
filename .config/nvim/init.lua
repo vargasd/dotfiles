@@ -562,7 +562,7 @@ require("lazy").setup({
 							local files = {}
 							for _, file in ipairs(vim.api.nvim_get_runtime_file("dict/*", true)) do
 								local lang = vim.fn.fnamemodify(file, ":t:r")
-								local fullpath = vim.fs.normalize(file, ":p")
+								local fullpath = vim.fs.fnamemodify(file, ":p")
 								files[lang] = { ":" .. fullpath }
 							end
 
