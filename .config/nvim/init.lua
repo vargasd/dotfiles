@@ -1239,21 +1239,6 @@ require("lazy").setup({
 	},
 
 	{
-		"windwp/nvim-autopairs",
-		event = "InsertEnter",
-		-- Optional dependency
-		dependencies = { "hrsh7th/nvim-cmp" },
-		config = function()
-			require("nvim-autopairs").setup({
-				break_undo = false,
-			})
-			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-			local cmp = require("cmp")
-			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-		end,
-	},
-
-	{
 		"norcalli/nvim-colorizer.lua",
 		ft = "css",
 		cmd = { "ColorizerToggle" },
@@ -1496,6 +1481,7 @@ for i = 0, 25 do
 	vim.keymap.set("n", "m" .. lower(i), "m" .. upper(i))
 	vim.keymap.set("n", "'" .. lower(i), "'" .. upper(i))
 	vim.keymap.set("n", "`" .. lower(i), "`" .. upper(i))
+	vim.keymap.set("n", "<Tab>" .. lower(i), "`" .. upper(i))
 	-- vim.keymap.set("n", "m" .. upper(i), "m" .. lower(i))
 	-- vim.keymap.set("n", "'" .. upper(i), "'" .. lower(i))
 	-- vim.keymap.set("n", "`" .. upper(i), "`" .. lower(i))
@@ -1569,6 +1555,9 @@ vim.api.nvim_create_user_command("SetTitle", function(opts)
 	vim.o.titlestring = overridetitle
 end, { nargs = 1 })
 --#endregion
+
+--vim.api.nvim_create_autocmd()
+--autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
 
 vim.filetype.add({
 	extension = {
