@@ -429,17 +429,6 @@ require("lazy").setup({
 					lsp_workspace_symbols = split_layout_config,
 				},
 				extensions = {
-					emoji = {
-						action = function(emoji)
-							-- argument emoji is a table.
-							-- {name="", value="", cagegory="", description=""}
-
-							vim.fn.setreg("e", emoji.value)
-
-							-- insert emoji when picked
-							vim.api.nvim_put({ emoji.value }, "c", false, true)
-						end,
-					},
 					["ui-select"] = {
 						require("telescope.themes").get_cursor(),
 					},
@@ -456,7 +445,6 @@ require("lazy").setup({
 			})
 
 			pcall(telescope.load_extension, "fzf")
-			pcall(telescope.load_extension, "emoji")
 			pcall(telescope.load_extension, "ui-select")
 
 			local project_files = function()
@@ -497,9 +485,6 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>F", builtins.find_files, { desc = "Find all Files" })
 			vim.keymap.set("n", "<leader>b", builtins.buffers, { desc = "Find buffers" })
 			vim.keymap.set("n", "<leader>B", builtins.oldfiles, { desc = "Find buffers" })
-			vim.keymap.set("n", "<leader><cr>", function()
-				vim.cmd.Telescope("emoji")
-			end, { desc = "Pick Emoji" })
 			vim.keymap.set("n", "<leader>d", function()
 				builtins.diagnostics({ bufnr = 0 })
 			end, { desc = "Diagnostics" })
