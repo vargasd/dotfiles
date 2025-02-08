@@ -911,6 +911,23 @@ require("lazy").setup({
 				desc = "Search Messages",
 			},
 		},
+		config = function(self, opts)
+			require("noice").setup({
+				routes = {
+					{
+						view = "notify",
+						filter = { event = "msg_showmode" },
+					},
+					{
+						filter = {
+							kind = "",
+							find = "written",
+						},
+						opts = { skip = true },
+					},
+				},
+			})
+		end,
 	},
 
 	{
@@ -948,6 +965,14 @@ require("lazy").setup({
 	{
 		"nvim-lualine/lualine.nvim",
 		config = function()
+			local function macro_recording()
+				local mode = require("noice").api.status.mode.get()
+				if mode then
+					return string.match(mode, "^recording @.*") or ""
+				end
+				return ""
+			end
+
 			local base_config = {
 				lualine_b = {
 					{
@@ -968,6 +993,7 @@ require("lazy").setup({
 						},
 					},
 				},
+				lualine_c = { macro_recording },
 				lualine_x = { "encoding", "fileformat", "filetype", "location" },
 				lualine_y = { "branch" },
 			}
