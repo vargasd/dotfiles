@@ -80,11 +80,10 @@ alias jqi='f() { echo "" | fzf -q "." \
   --preview "cat $1 | jq ${@:2} {q} | bat --color=always --plain -l json" \
 }; f'
 
-[ -f $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh ] && . $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh
-
 export EDITOR="nvim"
 export HOMEBREW_BUNDLE_FILE="$HOME/dotfiles/exclude/Brewfile"
-export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH"
+export ASDF_DATA_DIR="$XDG_DATA_HOME/asdf"
+export PATH="$ASDF_DATA_DIR/shims:$PATH"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
 export FZF_DEFAULT_OPTS='--color=16'
@@ -92,11 +91,3 @@ source <(fzf --zsh)
 source ~/dotfiles/submodules/fzf-git.sh/fzf-git.sh
 
 source <(zoxide init zsh)
-
-# pnpm
-export PNPM_HOME="/Users/sam/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
