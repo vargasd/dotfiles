@@ -6,7 +6,7 @@ brew bundle --file $root/exclude/Brewfile
 
 $root/scripts/mac-settings.sh
 
-git submodule update --init --remote
+git submodule update --init --remote --recursive
 
 # registers additional bat themes/languages
 bat cache --build
