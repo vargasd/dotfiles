@@ -20,6 +20,5 @@ require("lazy").setup({
 		{ import = "plugins" },
 	},
 	install = { colorscheme = { "fansi" } },
-	checker = { enabled = true },
 	rocks = { enabled = true },
 })
