@@ -25,13 +25,6 @@ vim.diagnostic.config({
 	severity_sort = true,
 })
 
--- fat finger commands
-vim.api.nvim_create_user_command("E", "edit", {})
-vim.api.nvim_create_user_command("W", "write", {})
-vim.api.nvim_create_user_command("Q", "quit", {})
-vim.api.nvim_create_user_command("Wq", "wq", {})
-vim.api.nvim_create_user_command("WQ", "wq", {})
-
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
 	callback = function()
