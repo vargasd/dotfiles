@@ -36,75 +36,45 @@ return {
 		"lewis6991/gitsigns.nvim",
 		opts = {
 			current_line_blame = true,
-			current_line_blame_opts = {
-				virt_text = true,
-				virt_text_pos = "eol",
-				delay = 1000,
-				ignore_whitespace = true,
-			},
 			attach_to_untracked = true,
-			signs = {
-				add = { text = "+" },
-				change = { text = "~" },
-				delete = { text = "_" },
-				topdelete = { text = "‾" },
-				changedelete = { text = "~" },
-				untracked = { text = "┆" },
-			},
-		},
-		keys = {
-			-- don't override the built-in and fugitive keymaps
-			{
-				"]g",
-				function()
+			on_attach = function(bufnr)
+				local gitsigns = require("gitsigns")
+				local next_integrations = require("nvim-next.integrations")
+				local next_gs = next_integrations.gitsigns(gitsigns)
+
+				-- don't override the built-in and fugitive keymaps
+				vim.keymap.set({ "n", "v" }, "]g", function()
 					if vim.wo.diff then
 						return "]g"
 					end
 					vim.schedule(function()
-						require("nvim-next.integrations").gitsigns(require("gitsigns")).next_hunk()
+						next_gs.next_hunk()
 					end)
 					return "<Ignore>"
-				end,
-				{ expr = true, desc = "Jump to next hunk" },
-				{ "n", "v" },
-			},
-			{
-				"[g",
-				function()
+				end, { expr = true, buffer = bufnr, desc = "Jump to next hunk" })
+				vim.keymap.set({ "n", "v" }, "[g", function()
 					if vim.wo.diff then
 						return "[g"
 					end
 					vim.schedule(function()
-						require("nvim-next.integrations").gitsigns(require("gitsigns")).prev_hunk()
+						next_gs.prev_hunk()
 					end)
 					return "<Ignore>"
-				end,
-				{ expr = true, desc = "Jump to previous hunk" },
-				{ "n", "v" },
-			},
-			{
-				"<leader>ga",
-				function()
-					require("gitsigns").stage_hunk()
-				end,
-			},
-			{
-				"<leader>g<BS>",
-				function()
-					require("gitsigns").reset_hunk()
-				end,
-			},
+				end, { expr = true, buffer = bufnr, desc = "Jump to previous hunk" })
+				vim.keymap.set({ "n" }, "<leader>ga", gitsigns.stage_hunk)
+				vim.keymap.set({ "n" }, "<leader>g<BS>", gitsigns.reset_hunk)
+			end,
 		},
+	},
 
-		{
-			"kdheepak/lazygit.nvim",
-			dependencies = {
-				"nvim-lua/plenary.nvim",
-			},
-			keys = {
-				{ "<leader>G", vim.cmd.LazyGit, desc = "LazyGit" },
-				{ "<leader>gh", vim.cmd.LazyGitFilterCurrentFile, desc = "Show file commits" },
-			},
+	{
+		"kdheepak/lazygit.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+		},
+		keys = {
+			{ "<leader>G", vim.cmd.LazyGit, desc = "LazyGit" },
+			{ "<leader>gh", vim.cmd.LazyGitFilterCurrentFile, desc = "Show file commits" },
 		},
 	},
 }
