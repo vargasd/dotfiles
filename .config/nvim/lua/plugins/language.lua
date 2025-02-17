@@ -58,6 +58,7 @@ return {
 
 			local servers = {
 				bashls = {},
+				clangd = {},
 				cssls = {},
 				html = {},
 				marksman = {},
