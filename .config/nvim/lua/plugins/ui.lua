@@ -66,6 +66,15 @@ return {
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			{
+				"danielfalk/smart-open.nvim",
+				branch = "0.2.x",
+				dependencies = {
+					"kkharji/sqlite.lua",
+					-- Only required if using match_algorithm fzf
+					{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+				},
+			},
+			{
 				"nvim-telescope/telescope-fzf-native.nvim",
 				build = "make",
 				cond = function()
@@ -156,24 +165,6 @@ return {
 			pcall(telescope.load_extension, "fzf")
 			pcall(telescope.load_extension, "ui-select")
 
-			local project_files = function()
-				local is_inside_work_tree = {}
-
-				local opts = { show_untracked = true }
-
-				local cwd = vim.fn.getcwd()
-				if is_inside_work_tree[cwd] == nil then
-					vim.fn.system("git rev-parse --is-inside-work-tree")
-					is_inside_work_tree[cwd] = vim.v.shell_error == 0
-				end
-
-				if is_inside_work_tree[cwd] then
-					builtins.git_files(opts)
-				else
-					builtins.find_files(opts)
-				end
-			end
-
 			local grep_prompt = function(additional_args)
 				builtins.grep_string({
 					search = vim.fn.input("(grep) "),
@@ -190,7 +181,12 @@ return {
 			vim.keymap.set("n", "<leader>>", function()
 				grep_prompt("-uu")
 			end, { desc = "Grep in all files" })
-			vim.keymap.set("n", "<leader>f", project_files, { desc = "Find files" })
+			vim.keymap.set("n", "<leader>f", function()
+				require("telescope").extensions.smart_open.smart_open({
+					cwd_only = true,
+					filename_first = false,
+				})
+			end, { desc = "Find files" })
 			vim.keymap.set("n", "<leader>F", builtins.find_files, { desc = "Find all Files" })
 			vim.keymap.set("n", "<leader>b", builtins.buffers, { desc = "Find buffers" })
 			vim.keymap.set("n", "<leader>B", builtins.oldfiles, { desc = "Find buffers" })
