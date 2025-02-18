@@ -153,6 +153,9 @@ return {
 					["ui-select"] = {
 						require("telescope.themes").get_cursor(),
 					},
+					smart_open = {
+						match_algorithm = "fzf",
+					},
 					aerial = {
 						format_symbol = function(symbol_path, filetype)
 							if filetype == "json" or filetype == "yaml" then
