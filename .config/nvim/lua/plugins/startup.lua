@@ -48,7 +48,7 @@ return {
 				dashboard.button(
 					"f",
 					"  Find Files",
-					":Telescope " .. (git_sha ~= "" and "git_files" or "find_files") .. "<cr>"
+					":Telescope smart_open filename_first=false" .. (#git_sha == 0 and "" or " cwd_only=true") .. "<cr>"
 				),
 				dashboard.button("/", " " .. " Find Text", ":Telescope live_grep <CR>"),
 				dashboard.button("e", "󰙅 " .. " Open Explorer", ":FloatermNew yazi <CR>"),
