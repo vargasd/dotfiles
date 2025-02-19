@@ -8,3 +8,5 @@ unzip -o $dir/dedrm.zip -d $dir/dedrm
 
 calibre-customize --add $dir/dedrm/DeDRM_plugin.zip
 calibre-customize --add $dir/dedrm/Obok_plugin.zip
+# Usage
+# calibredb add /path/to/book.format --with-library=$HOME/Documents/library
