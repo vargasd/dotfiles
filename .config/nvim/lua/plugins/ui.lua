@@ -359,6 +359,7 @@ return {
 
 	{
 		"mikavilpas/yazi.nvim",
+		dependencies = { "folke/snacks.nvim", lazy = true },
 		keys = {
 			{
 				"<leader>e",
@@ -373,8 +374,19 @@ return {
 				desc = "Open the file manager at cwd",
 			},
 		},
+		---require('yazi')
+		---@type YaziConfig | {}
 		opts = {
 			open_for_directories = true,
+			integrations = {
+				grep_in_directory = function(cwd)
+					require("snacks.picker").grep({
+						cwd = cwd,
+						ignored = true,
+						hidden = true,
+					})
+				end,
+			},
 		},
 	},
 
