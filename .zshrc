@@ -72,7 +72,6 @@ alias ll='eza -l'
 alias lla='eza -la'
 alias ls='eza'
 alias lt='eza --tree'
-alias vim='nvim'
 alias jqi='f() { echo "" | fzf -q "." \
   --bind "shift-up:preview-half-page-up,shift-down:preview-half-page-down,load:unbind(enter)" \
   --preview-window "bottom:99%" \
