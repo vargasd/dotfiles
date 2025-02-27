@@ -8,6 +8,5 @@ exclude/Brewfile.lock.json
 .config/yazi/plugins
 
 # don't care/too noisy
-.config/nvim/lazy-lock.json
 .config/btop/btop.log
 
