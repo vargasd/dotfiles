@@ -15,27 +15,26 @@
 	reste = reset
 [log]
 	date = "format-local:%F %R"
+[column]
+	ui = auto
 [commit]
 	gpgSign = true
 [core]
-	; pager = "less -S"
-	pager = delta
+	pager = bat
 [interactive]
 	diffFilter = delta --color-only
 [delta]
 	navigate = true
 	tabs = 2
-	syntax-theme = ansi
+	syntax-theme = enhansi
 [diff]
-	; tool = "difftastic"
-	colorMoved = default
-	algorithm = "histogram"
-[difftool]
-	prompt = false
-[difftool "difftastic"]
-	cmd = difft "$LOCAL" "$REMOTE"
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
 [fetch]
 	prune = true
+	pruneTags = true
 	writeCommitGraph = true
 [grep]
 	lineNumber = true
@@ -51,15 +50,20 @@
 	rebase = true
 [push]
 	default = "current"
+	autoSetupRemote = true
+	followTags = true
 [rebase]
 	autoSquash = true
 	autoStash = true
+	updateRefs = true
 [receive]
 	denyCurrentBranch = warn
 [rerere]
 	enabled = true
+	autoupdate = true
 [tag]
 	gpgSign = true
+	sort = version:refname
 [user]
 	email = "sam@vargasd.com"
 	name = "Samuel Varga"
