@@ -155,6 +155,14 @@ return {
 					},
 					smart_open = {
 						match_algorithm = "fzf",
+						-- https://github.com/danielfalk/smart-open.nvim/issues/71
+						mappings = {
+							i = {
+								["<C-w>"] = function()
+									vim.api.nvim_input("<c-s-w>")
+								end,
+							},
+						},
 					},
 					aerial = {
 						format_symbol = function(symbol_path, filetype)
