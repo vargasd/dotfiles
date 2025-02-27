@@ -34,31 +34,37 @@ return {
 
 	{
 		"lewis6991/gitsigns.nvim",
+		lazy = true,
+		event = "VeryLazy",
+		dependencies = { "ghostbuster91/nvim-next", lazy = true },
 		opts = {
-			current_line_blame = true,
 			attach_to_untracked = true,
 			on_attach = function(bufnr)
 				local gitsigns = require("gitsigns")
-				local next_integrations = require("nvim-next.integrations")
-				local next_gs = next_integrations.gitsigns(gitsigns)
+				local move = require("nvim-next.move")
+				local prev, next = move.make_repeatable_pair(function()
+					gitsigns.nav_hunk("prev", {
+						navigation_message = false,
+					})
+				end, function()
+					gitsigns.nav_hunk("next", {
+						navigation_message = false,
+					})
+				end)
 
 				-- don't override the built-in and fugitive keymaps
 				vim.keymap.set({ "n", "v" }, "]g", function()
 					if vim.wo.diff then
 						return "]g"
 					end
-					vim.schedule(function()
-						next_gs.next_hunk()
-					end)
+					vim.schedule(next)
 					return "<Ignore>"
 				end, { expr = true, buffer = bufnr, desc = "Jump to next hunk" })
 				vim.keymap.set({ "n", "v" }, "[g", function()
 					if vim.wo.diff then
 						return "[g"
 					end
-					vim.schedule(function()
-						next_gs.prev_hunk()
-					end)
+					vim.schedule(prev)
 					return "<Ignore>"
 				end, { expr = true, buffer = bufnr, desc = "Jump to previous hunk" })
 				vim.keymap.set({ "n" }, "<leader>ga", gitsigns.stage_hunk)
