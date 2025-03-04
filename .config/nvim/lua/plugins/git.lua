@@ -38,6 +38,7 @@ return {
 		event = "VeryLazy",
 		dependencies = { "ghostbuster91/nvim-next", lazy = true },
 		opts = {
+			current_line_blame = true,
 			attach_to_untracked = true,
 			on_attach = function(bufnr)
 				local gitsigns = require("gitsigns")
