@@ -168,9 +168,9 @@ workspace_switcher.workspace_formatter = function(label)
 	})
 end
 wezterm.on("gui-startup", function()
-	resurrect.resurrect_on_gui_startup()
+	resurrect.state_manager.resurrect_on_gui_startup()
 end)
-resurrect.periodic_save({
+resurrect.state_manager.periodic_save({
 	interval_seconds = 60 * 5,
 	save_windows = true,
 	save_sessions = true,
