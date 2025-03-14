@@ -16,5 +16,3 @@ skhd --start-service
 # install asdf tools
 cat .tool-versions | cut -d' ' -f1 | grep "^[^\#]" | xargs -I {} asdf plugin add  {}
 asdf install
-
-$root/scripts/calibre-dedrm.sh
