@@ -28,12 +28,7 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
-
-			{ "williamboman/mason.nvim", config = true },
-			"williamboman/mason-lspconfig.nvim",
-
 			"lukas-reineke/lsp-format.nvim",
-
 			{
 				"creativenull/efmls-configs-nvim",
 				version = "v1.x.x", -- version is optional, but recommended
@@ -46,6 +41,7 @@ return {
 			-- not working right now
 			-- local prettier = require("efmls-configs.formatters.prettier_d")
 			local prettier = require("efmls-configs.formatters.prettier")
+			local nixfmt = require("efmls-configs.formatters.nixfmt")
 
 			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
 				border = "rounded",
@@ -62,7 +58,8 @@ return {
 				cssls = {},
 				html = {},
 				marksman = {},
-				ltex = {},
+				harper_ls = {},
+				nixd = {},
 				prismals = {},
 				rust_analyzer = {},
 				svelte = {},
@@ -170,6 +167,7 @@ return {
 							sql = { prettier },
 							markdown = { prettier },
 							typespec = { prettier },
+							nix = { nixfmt },
 							lua = { stylua },
 							terraform = { terraform_fmt },
 						},
@@ -193,25 +191,16 @@ return {
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
-			local mason_lspconfig = require("mason-lspconfig")
-
-			mason_lspconfig.setup({
-				automatic_installation = true,
-				ensure_installed = vim.tbl_keys(servers),
-			})
-
-			mason_lspconfig.setup_handlers({
-				function(server_name)
-					require("lspconfig")[server_name].setup(vim.tbl_extend("keep", servers[server_name], {
-						capabilities = capabilities,
-						on_init = function(client)
-							-- treesitter does our highlighting, thanks
-							client.server_capabilities.semanticTokensProvider = nil
-						end,
-						on_attach = on_attach,
-					}))
-				end,
-			})
+			for server_name, config in pairs(servers) do
+				require("lspconfig")[server_name].setup(vim.tbl_extend("keep", config, {
+					capabilities = capabilities,
+					on_init = function(client)
+						-- treesitter does our highlighting, thanks
+						client.server_capabilities.semanticTokensProvider = nil
+					end,
+					on_attach = on_attach,
+				}))
+			end
 		end,
 	},
 
@@ -231,52 +220,5 @@ return {
 				{ path = "wezterm-types", mods = { "wezterm" } },
 			},
 		},
-	},
-
-	{
-		"vigoux/ltex-ls.nvim",
-		ft = { "latex", "tex", "bib", "markdown", "gitcommit", "text" },
-		config = function(self, opts)
-			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
-
-			require("ltex-ls").setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-				use_spellfile = false,
-				filetypes = { "latex", "tex", "bib", "markdown", "gitcommit", "text" },
-				settings = {
-					ltex = {
-						enabled = { "latex", "tex", "bib", "markdown" },
-						language = "en-US",
-						checkFrequency = "save",
-						sentenceCacheSize = 2000,
-						dictionary = (function()
-							-- For dictionary, search for files in the runtime to have
-							-- and include them as externals the format for them is
-							-- dict/{LANG}.txt
-							--
-							-- Also add dict/default.txt to all of them
-							local files = {}
-							for _, file in ipairs(vim.api.nvim_get_runtime_file("dict/*", true)) do
-								local lang = vim.fn.fnamemodify(file, ":t:r")
-								local fullpath = vim.fs.fnamemodify(file, ":p")
-								files[lang] = { ":" .. fullpath }
-							end
-
-							if files.default then
-								for lang, _ in pairs(files) do
-									if lang ~= "default" then
-										vim.list_extend(files[lang], files.default)
-									end
-								end
-								files.default = nil
-							end
-							return files
-						end)(),
-					},
-				},
-			})
-		end,
 	},
 }
