@@ -7,7 +7,7 @@ return {
 			local dashboard = require("alpha.themes.dashboard")
 
 			-- just some silly stuff
-			math.randomseed()
+			math.randomseed(os.time())
 			local shuffled = {}
 			for _, v in ipairs({
 				[[███    ██ ███████  ██████  ██    ██ ██ ███    ███]],
