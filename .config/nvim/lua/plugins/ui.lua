@@ -5,14 +5,14 @@ return {
 	{ "folke/which-key.nvim", event = "VeryLazy" },
 
 	{
-		"vargasd/fansi.nvim",
+		"vargasd/enhansi",
 		priority = 1000,
 		config = function()
-			require("fansi").setup({
+			require("enhansi").setup({
 				transparent_mode = true,
 			})
 
-			vim.cmd.colorscheme("fansi")
+			vim.cmd.colorscheme("enhansi")
 		end,
 	},
 

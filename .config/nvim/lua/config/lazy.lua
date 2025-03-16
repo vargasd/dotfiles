@@ -19,6 +19,6 @@ require("lazy").setup({
 	spec = {
 		{ import = "plugins" },
 	},
-	install = { colorscheme = { "fansi" } },
+	install = { colorscheme = { "enhansi" } },
 	rocks = { enabled = true },
 })
